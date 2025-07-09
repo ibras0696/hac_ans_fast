@@ -1,19 +1,15 @@
-from fastapi import APIRouter, Request
+from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 import os
 
-from app.templates import ALL_TEMPLATES_DIR
+router = FastAPI()
 
-router = APIRouter()
-
-templates = Jinja2Templates(directory=ALL_TEMPLATES_DIR)
+TEMPLATES_DIR = os.path.dirname(os.path.abspath(__file__))
+templates = Jinja2Templates(directory=os.path.join(TEMPLATES_DIR, "static"))
 
 
 @router.get("/")
 async def user(request: Request):
-
-    information = ['Movsar', 'Tutuev', '16', 'Ahmat-Yurt']
-
     return templates.TemplateResponse(
         "user.html",
-        {"request": request, "title": information})
+        {"request": request, "title": "Главная страница"})
