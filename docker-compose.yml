@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  fastapi_app:
+    build:
+      context: .
+      dockerfile: fastapi.Dockerfile   # <-- имя файла докерфайла FastAPI
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: always
+
+  aiogram_bot:
+    build:
+      context: .
+      dockerfile: bot.Dockerfile       # <-- имя файла докерфайла бота
+    container_name: aiogram_bot
+    volumes:
+      - .:/app
+    restart: always
+    depends_on:
+      - fastapi_app
