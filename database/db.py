@@ -23,9 +23,9 @@ async_session = async_sessionmaker(
 )
 
 
-async def init_db():
-    """
-    Инициализация базы данных: создание таблиц.
-    """
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+# async def init_db():
+#     """
+#     Инициализация базы данных: создание таблиц.
+#     """
+#     async with engine.begin() as conn:
+#         await conn.run_sync(Base.metadata.create_all)
