@@ -5,14 +5,14 @@ from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
-from routes import router
+from .routes import router
 
 app = FastAPI()
 
 # Подключение Шаблонизатора
 # Правильный путь до папки templates
 TEMPLATES_DIR = os.path.dirname(os.path.abspath(__file__))
-templates = Jinja2Templates(directory=os.path.join(TEMPLATES_DIR, "static"))
+templates = Jinja2Templates(directory=os.path.join(TEMPLATES_DIR, "templates"))
 
 
 # Подключение css
