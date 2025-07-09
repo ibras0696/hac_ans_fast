@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 1000px; margin: 40px auto; padding: 24px;">
+    <div style="text-align: center; margin-bottom: 48px;">
+        <h1 style="color: #0084f0; font-size: 2.8rem; font-weight: 800; margin-bottom: 16px; letter-spacing: 1px;">Наша команда</h1>
+        <p style="color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">Команда разработчиков, создавших инновационное решение для хакатона</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-bottom: 48px;">
+        <!-- Мовсар -->
+        <div style="background: linear-gradient(135deg, #0084f0 0%, #005fa3 100%); border-radius: 20px; padding: 32px; color: white; position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(0,132,240,0.2);">
+            <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 2rem; font-weight: bold;">М</div>
+                <div>
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">Мовсар</h3>
+                    <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; display: inline-block;">Капитан команды</div>
+                </div>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.6; opacity: 0.95;">Фронтенд-разработчик, объединял все роутеры и координировал работу команды. Отвечал за создание пользовательского интерфейса и интеграцию всех компонентов проекта.</p>
+            <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Frontend</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Координация</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">SQLAlchemy ORM</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Async</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Парсинг</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">FastAPI</div>
+            </div>
+        </div>
+
+        <!-- Ибрагим -->
+        <div style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); border-radius: 20px; padding: 32px; color: white; position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(46,204,113,0.2);">
+            <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 2rem; font-weight: bold;">И</div>
+                <div>
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">Ибрагим</h3>
+                    <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; display: inline-block;">Backend разработчик</div>
+                </div>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.6; opacity: 0.95;">Разрабатывал бэкенд на FastAPI, создавал API endpoints, работал с базой данных и обеспечивал высокую производительность серверной части приложения.</p>
+            <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">FastAPI</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Backend</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">SQLAlchemy ORM</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Async</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Парсинг</div>
+            </div>
+        </div>
+
+        <!-- Мансур -->
+        <div style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); border-radius: 20px; padding: 32px; color: white; position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(231,76,60,0.2);">
+            <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 2rem; font-weight: bold;">М</div>
+                <div>
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;">Мансур</h3>
+                    <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; display: inline-block;">Telegram разработчик</div>
+                </div>
+            </div>
+            <p style="font-size: 1rem; line-height: 1.6; opacity: 0.95;">Создавал Telegram-бота, интегрировал его с основным приложением и обеспечивал удобное взаимодействие пользователей через мессенджер.</p>
+            <div style="margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Telegram Bot</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">API</div>
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Парсинг</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Статистика команды -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin-top: 40px;">
+        <h3 style="color: #0084f0; text-align: center; margin-bottom: 24px; font-size: 1.5rem; font-weight: 700;">Наши достижения</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; text-align: center;">
+            <div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: #0084f0; margin-bottom: 8px;">3</div>
+                <div style="color: #666; font-weight: 600;">Разработчика</div>
+            </div>
+            <div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: #2ecc71; margin-bottom: 8px;">10+</div>
+                <div style="color: #666; font-weight: 600;">Технологий</div>
+            </div>
+            <div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: #e74c3c; margin-bottom: 8px;">24ч</div>
+                <div style="color: #666; font-weight: 600;">Время разработки</div>
+            </div>
+            <div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: #f39c12; margin-bottom: 8px;">100%</div>
+                <div style="color: #666; font-weight: 600;">Готовность</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media (max-width: 768px) {
+        .team-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %} 
