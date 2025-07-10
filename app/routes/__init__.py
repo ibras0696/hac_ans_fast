@@ -1,6 +1,9 @@
 from .user import router as user_rout
 from .auth import router as auth_rout
 from .moderator import router as moderator_rout
+from .technologies import router as project_technologies_rout
+from .this_comand import router as this_command_rout
+from .activities import router as activities_rout
 
 
 from fastapi import APIRouter
@@ -8,8 +11,15 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-router.include_router(user_rout, prefix="/user")
+router.include_router(user_rout)
 
 router.include_router(auth_rout, prefix="/auth")
 
 router.include_router(moderator_rout, prefix="/moderator")
+
+router.include_router(project_technologies_rout, prefix='/project_technologies')
+
+router.include_router(this_command_rout, prefix='/this_command')
+
+router.include_router(activities_rout, prefix='/activities')
+
