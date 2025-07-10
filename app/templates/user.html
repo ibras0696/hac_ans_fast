@@ -3,7 +3,7 @@
 {% block content %}
 <div class="recommendation-form-container">
     <h2>Получить персональные рекомендации</h2>
-    <form id="recommendationForm">
+    <form method="post" id="recommendationForm">
         <div class="form-group">
             <label for="weather">Текущая погода</label>
             <select id="weather" name="weather" required>
@@ -15,13 +15,8 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="timeofday">Время дня</label>
-            <select id="timeofday" name="timeofday" required>
-                <option value="morning">Утро</option>
-                <option value="afternoon">День</option>
-                <option value="evening">Вечер</option>
-                <option value="night">Ночь</option>
-            </select>
+            <label for="timeofday">Время</label>
+            <input type="time" id="timeofday" name="timeofday" required>
         </div>
         <div class="form-group">
             <label for="mood">Настроение</label>
@@ -37,7 +32,7 @@
             <input type="number" id="budget" name="budget" min="0" step="10" required placeholder="Например, 1000">
         </div>
         <div class="form-group">
-            <label for="location">Локация (автоопределение по IP, можно изменить)</label>
+            <label for="location">Локация (автоопределение по IP)</label>
             <div style="display:flex;gap:8px;align-items:center;">
                 <input type="text" id="location" name="location" required placeholder="Введите город или район" style="flex:1;">
                 <button type="button" id="detectLocation" title="Автоопределить город" style="padding:8px 14px;font-size:18px;">📍</button>
@@ -441,5 +436,22 @@ if (document.getElementById('openMoodModal')) {
     <!--    document.getElementById('recommendationResult').style.display = 'block';-->
     <!--    document.getElementById('recommendationResult').innerText = result + '\n(Здесь появятся ваши рекомендации)';-->
     <!--  });-->
+// Автоопределение времени дня
+function getTimeOfDay() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return 'Утро';
+  if (hour >= 12 && hour < 18) return 'День';
+  if (hour >= 18 && hour < 23) return 'Вечер';
+  return 'Ночь';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  const timeofday = document.getElementById('timeofday');
+  if (timeofday) {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    timeofday.value = `${hh}:${mm}`;
+  }
+});
 </script>
 {% endblock %}

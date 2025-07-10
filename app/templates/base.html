@@ -13,10 +13,45 @@
         }
 
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background: linear-gradient(120deg, #e3f0ff 0%, #f8f9fa 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
-
+        .bg-waves {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .bg-radial {
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            width: 120vw;
+            height: 80vh;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(ellipse at center, #e3f0ff 0%, #f8f9fa 60%, #e3f0ff 100%);
+            opacity: 0.85;
+            z-index: 1;
+            filter: blur(0.5px);
+        }
+        .wave-top, .wave-bottom {
+            position: absolute;
+            left: 0;
+            width: 100vw;
+            height: 180px;
+            min-width: unset;
+            max-width: unset;
+            preserveAspectRatio: none;
+        }
+        .wave-top { top: 0; }
+        .wave-bottom { bottom: 0; }
+        @media (max-width: 900px) {
+            .wave-top, .wave-bottom { height: 90px; }
+        }
         .left-bar {
             position: fixed;
             top: 0;
@@ -340,14 +375,22 @@
     </style>
 </head>
 <body>
+<!-- SVG фон с волнами сверху и снизу -->
+<div class="bg-waves">
+  <svg viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="wave-top" preserveAspectRatio="none">
+    <path fill-opacity=".18" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,133.3C840,107,960,85,1080,101.3C1200,117,1320,171,1380,197.3L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z" fill="#0084f0"/>
+    <path fill-opacity=".12" d="M0,224L60,208C120,192,240,160,360,154.7C480,149,600,171,720,186.7C840,203,960,213,1080,197.3C1200,181,1320,139,1380,117.3L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z" fill="#00c6fb"/>
+  </svg>
+  <svg viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="wave-bottom" preserveAspectRatio="none">
+    <path fill-opacity=".13" d="M0,288L60,272C120,256,240,224,360,197.3C480,171,600,149,720,154.7C840,160,960,192,1080,197.3C1200,203,1320,181,1380,170.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" fill="#0084f0"/>
+    <path fill-opacity=".09" d="M0,320L60,293.3C120,267,240,213,360,176C480,139,600,117,720,133.3C840,149,960,203,1080,218.7C1200,235,1320,213,1380,202.7L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" fill="#00c6fb"/>
+  </svg>
+</div>
 <div class="left-bar">
     <div class="logo-container" style="flex-direction:column;align-items:flex-start;gap:10px;">
-      <div class="logos-row" style="display:flex;align-items:center;gap:12px;">
-        <img src="/image/ansar_logo.png" alt="ANSAR logo" class="logo-img" style="width:44px;height:44px;object-fit:contain;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
-        <span style="font-size:2.1rem;font-weight:900;color:#0084f0;">+</span>
-        <img src="/image/ggnty_logo.png" alt="GGNTY logo" class="logo-img" style="width:44px;height:44px;object-fit:contain;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
-      </div>
-      <div class="logo-text" style="margin-top:2px;font-size:1.35rem;letter-spacing:1px;">ANSAR + GGNTY</div>
+        <div class="logos-row" style="display:flex;align-items:center;gap:12px;">
+        </div>
+        <div class="logo-text" style="margin-top:2px;font-size:1.35rem;letter-spacing:1px;">ANSAR + GGNTY</div>
     </div>
     <div class="nav-menu">
         <a href="/" class="nav-item active">
@@ -368,6 +411,20 @@
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span>Активности</span>
+        </a>
+        <a href="/favorites" class="nav-item">
+            <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 15.27L4.55 17.97a1 1 0 0 1-1.45-1.05l.88-5.13-3.74-3.65a1 1 0 0 1 .55-1.7l5.17-.75 2.31-4.7a1 1 0 0 1 1.8 0l2.31 4.7 5.17.75a1 1 0 0 1 .55 1.7l-3.74 3.65.88 5.13a1 1 0 0 1-1.45 1.05L9 15.27z"
+                      stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Избранное</span>
+        </a>
+        <a href="/history" class="nav-item">
+            <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="9" r="8" stroke="white" stroke-width="2"/>
+                <path d="M9 5v4l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>История активностей</span>
         </a>
         <a href="/project_technologies" class="nav-item">
             <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -408,32 +465,32 @@
     </div>
 </div>
 <div class="main-content">
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
 <script>
-// Блокировка скролла body при открытом модальном окне
-function openModal(modalId) {
-  document.getElementById(modalId).style.display = 'block';
-  document.body.classList.add('modal-open');
-}
-function closeModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
-  document.body.classList.remove('modal-open');
-}
-// Для совместимости с существующими id
-if (document.getElementById('openMoodModal')) {
-  document.getElementById('openMoodModal').onclick = function() { openModal('moodModal'); };
-}
-if (document.getElementById('moodModal')) {
-  var closeBtn = document.querySelector('#moodModal .close');
-  if (closeBtn) closeBtn.onclick = function() { closeModal('moodModal'); };
-}
-// Закрытие по клику вне окна
-window.addEventListener('click', function(e) {
-  var modal = document.getElementById('moodModal');
-  if (modal && e.target === modal) closeModal('moodModal');
-});
+    // Блокировка скролла body при открытом модальном окне
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = 'block';
+      document.body.classList.add('modal-open');
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+      document.body.classList.remove('modal-open');
+    }
+    // Для совместимости с существующими id
+    if (document.getElementById('openMoodModal')) {
+      document.getElementById('openMoodModal').onclick = function() { openModal('moodModal'); };
+    }
+    if (document.getElementById('moodModal')) {
+      var closeBtn = document.querySelector('#moodModal .close');
+      if (closeBtn) closeBtn.onclick = function() { closeModal('moodModal'); };
+    }
+    // Закрытие по клику вне окна
+    window.addEventListener('click', function(e) {
+      var modal = document.getElementById('moodModal');
+      if (modal && e.target === modal) closeModal('moodModal');
+    });
 </script>
 </body>
 </html>

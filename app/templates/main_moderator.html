@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="moder-glass">
+    <h1 class="wow-title">Панель модератора</h1>
+    <div class="moder-actions">
+        <a href="check_activities" class="moder-action-btn">
+            <span>Посмотреть список</span>
+            <svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 16h22M23 11l6 5-6 5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="add_activities" class="moder-action-btn">
+            <span>Добавить активность</span>
+            <svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="14" stroke="#fff" stroke-width="2.5"/>
+                <path d="M16 10v12M10 16h12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+        </a>
+    </div>
+</div>
+<style>
+    body {
+      background: linear-gradient(120deg, #e3f0ff 0%, #f8f9fa 100%);
+    }
+    .moder-glass {
+      max-width: 540px;
+      margin: 80px auto 0 auto;
+      background: rgba(255,255,255,0.22);
+      border-radius: 36px;
+      box-shadow: 0 16px 48px 0 rgba(0,132,240,0.18), 0 2px 12px 0 rgba(0,0,0,0.10);
+      border: 2.5px solid rgba(0,132,240,0.18);
+      padding: 56px 40px 44px 40px;
+      position: relative;
+      backdrop-filter: blur(18px) saturate(1.5);
+      -webkit-backdrop-filter: blur(18px) saturate(1.5);
+      overflow: hidden;
+      animation: glass-pop 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes glass-pop {
+      from { opacity: 0; transform: scale(0.92) translateY(60px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .moder-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(circle at 80% 10%, rgba(0,200,255,0.18) 0%, transparent 60%),
+                  radial-gradient(circle at 20% 90%, rgba(0,132,240,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .wow-title {
+      text-align: center;
+      font-size: 2.7rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-bottom: 48px;
+      color: #0084f0;
+      text-shadow: 0 4px 32px rgba(0,132,240,0.13), 0 1.5px 8px rgba(0,0,0,0.08);
+      background: linear-gradient(90deg, #0084f0 0%, #00c6fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .moder-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 38px;
+      width: 100%;
+      align-items: center;
+    }
+    .moder-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      width: 100%;
+      max-width: 370px;
+      padding: 32px 0;
+      background: linear-gradient(90deg, #0084f0 0%, #00c6fb 100%);
+      color: #fff;
+      font-size: 1.45rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 22px;
+      box-shadow: 0 12px 40px rgba(0,132,240,0.15), 0 2px 12px rgba(0,0,0,0.08);
+      text-decoration: none;
+      letter-spacing: 1.2px;
+      transition: background 0.22s, transform 0.18s, box-shadow 0.18s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      will-change: transform, box-shadow;
+      animation: btn-pop 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes btn-pop {
+      from { opacity: 0; transform: scale(0.95) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .moder-action-btn svg {
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 8px rgba(0,198,251,0.13));
+      transition: transform 0.22s;
+    }
+    .moder-action-btn:hover {
+      background: linear-gradient(90deg, #005fa3 0%, #0084f0 100%);
+      transform: translateY(-6px) scale(1.04) rotate(-1deg);
+      box-shadow: 0 24px 64px rgba(0,132,240,0.22);
+    }
+    .moder-action-btn:hover svg {
+      transform: scale(1.18) rotate(8deg);
+    }
+    .moder-action-btn:active {
+      transform: scale(0.98);
+    }
+    .moder-action-btn span {
+      z-index: 1;
+      position: relative;
+    }
+    @media (max-width: 700px) {
+      .moder-glass {
+        padding: 22px 6vw 18px 6vw;
+        border-radius: 18px;
+      }
+      .wow-title {
+        font-size: 1.3rem;
+        margin-bottom: 22px;
+      }
+      .moder-action-btn {
+        font-size: 1.05rem;
+        padding: 18px 0;
+        border-radius: 10px;
+        max-width: 100%;
+      }
+    }
+</style>
+{% endblock %}
