@@ -11,8 +11,8 @@ app = FastAPI()
 
 # Правильный путь до папки templates
 TEMPLATES_DIR = os.path.dirname(os.path.abspath(__file__))
-# Подключение Шаблонизатора
-templates = Jinja2Templates(directory=os.path.join(TEMPLATES_DIR, "static"))
+templates = Jinja2Templates(directory=os.path.join(TEMPLATES_DIR, "templates"))
+
 
 # Правильный путь до папки static
 STATIC_DIR = os.path.dirname(os.path.abspath(__file__))

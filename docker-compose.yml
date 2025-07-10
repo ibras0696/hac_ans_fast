@@ -3,22 +3,22 @@ version: "3.9"
 services:
   fastapi_app:
     build:
-      context: .
-      dockerfile: fastapi.Dockerfile   # <-- имя файла докерфайла FastAPI
+      context: .  # Контекст сборки — корень проекта (видит requirements.txt)
+      dockerfile: ./app/Dockerfile  # Путь к Dockerfile внутри папки app
     container_name: fastapi_app
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./app:/app  # Монтирование только папки app (для разработки)
     restart: always
 
   aiogram_bot:
     build:
-      context: .
-      dockerfile: bot.Dockerfile       # <-- имя файла докерфайла бота
+      context: .  # Корень проекта
+      dockerfile: ./tg_admin_bot/Dockerfile
     container_name: aiogram_bot
     volumes:
-      - .:/app
+      - ./tg_admin_bot:/app  # Монтирование только папки tg_admin_bot
     restart: always
     depends_on:
-      - fastapi_app
+      - fastapi_app  # Ждём запуска FastAPI
