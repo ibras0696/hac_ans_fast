@@ -169,12 +169,185 @@
                 padding: 10px 0;
             }
         }
+        /* --- ПРЕМИУМ МОДАЛЬНОЕ ОКНО (GLASSMORPHISM) --- */
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 9999;
+          left: 0; top: 0;
+          width: 100vw; height: 100vh;
+          background: rgba(0, 132, 240, 0.22);
+          backdrop-filter: blur(6px) saturate(1.3);
+          animation: modal-fade-in 0.45s cubic-bezier(.4,0,.2,1);
+          overflow-y: auto;
+        }
+        @keyframes modal-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .modal-content {
+          background: rgba(255,255,255,0.22);
+          box-shadow: 0 12px 48px 0 rgba(0,132,240,0.22), 0 2px 12px 0 rgba(0,0,0,0.10);
+          border-radius: 32px;
+          border: 2.5px solid rgba(0,132,240,0.18);
+          margin: 70px auto;
+          padding: 48px 38px 36px 38px;
+          width: 95%;
+          max-width: 440px;
+          position: relative;
+          animation: modal-content-pop 0.55s cubic-bezier(.4,0,.2,1);
+          backdrop-filter: blur(18px) saturate(1.5);
+          -webkit-backdrop-filter: blur(18px) saturate(1.5);
+          overflow: hidden;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+        @keyframes modal-content-pop {
+          from { transform: scale(0.92) translateY(60px); opacity: 0; }
+          to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .modal-content::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background: radial-gradient(circle at 80% 10%, rgba(0,200,255,0.18) 0%, transparent 60%),
+                      radial-gradient(circle at 20% 90%, rgba(0,132,240,0.13) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .modal-content h2 {
+          text-align: center;
+          color: #0084f0;
+          font-weight: 900;
+          margin-bottom: 22px;
+          font-size: 1.55rem;
+          letter-spacing: 1.5px;
+          text-shadow: 0 2px 16px rgba(0,132,240,0.10);
+          position: relative;
+          z-index: 1;
+        }
+        .modal-content label {
+          color: #005fa3;
+          font-weight: 600;
+          position: relative;
+          z-index: 1;
+        }
+        .modal-content button[type="submit"] {
+          width: 100%;
+          margin-top: 22px;
+          background: linear-gradient(90deg, #00c6fb 0%, #0084f0 100%);
+          color: #fff;
+          font-weight: 900;
+          font-size: 1.13rem;
+          border: none;
+          border-radius: 12px;
+          padding: 15px 0;
+          box-shadow: 0 4px 24px rgba(0,132,240,0.13);
+          transition: background 0.22s, transform 0.18s, box-shadow 0.18s;
+          cursor: pointer;
+          position: relative;
+          z-index: 1;
+          letter-spacing: 0.5px;
+        }
+        .modal-content button[type="submit"]:hover {
+          background: linear-gradient(90deg, #0084f0 0%, #00c6fb 100%);
+          transform: translateY(-2px) scale(1.04);
+          box-shadow: 0 8px 32px rgba(0,132,240,0.18);
+        }
+        .close {
+          position: absolute;
+          top: 18px;
+          right: 22px;
+          font-size: 28px;
+          color: #fff;
+          background: linear-gradient(135deg, #00c6fb 0%, #0084f0 100%);
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-weight: bold;
+          box-shadow: 0 2px 16px rgba(0,132,240,0.18);
+          border: 2px solid #fff;
+          transition: background 0.18s, color 0.18s, transform 0.18s;
+          z-index: 2;
+        }
+        .close:hover {
+          background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+          color: #fff;
+          transform: scale(1.12) rotate(90deg);
+        }
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+          width: 100%;
+          border-radius: 10px;
+          border: 1.5px solid #b3d8f7;
+          padding: 10px 14px;
+          font-size: 1rem;
+          background: rgba(255,255,255,0.93);
+          margin-top: 7px;
+          margin-bottom: 14px;
+          transition: border 0.22s, background 0.22s, box-shadow 0.22s;
+          outline: none;
+          box-shadow: 0 1.5px 8px rgba(0,132,240,0.07), inset 0 1.5px 8px rgba(0,132,240,0.06);
+        }
+        .modal-content input:focus,
+        .modal-content select:focus,
+        .modal-content textarea:focus {
+          border: 1.5px solid #36a6e6;
+          background: #fff;
+          box-shadow: 0 0 0 3px rgba(0, 198, 251, 0.13), 0 1.5px 8px rgba(0,132,240,0.07), inset 0 1.5px 8px rgba(0,132,240,0.06);
+        }
+        .modal-content input[type="range"] {
+          accent-color: #00c6fb;
+          margin-bottom: 10px;
+        }
+        /* Красивая кнопка для анкеты настроения */
+        .mood-btn, #openMoodModal {
+          display: inline-block;
+          background: linear-gradient(90deg, #0084f0 60%, #00c6fb 100%);
+          color: #fff;
+          font-weight: 800;
+          font-size: 1.05rem;
+          border: none;
+          border-radius: 8px;
+          padding: 12px 28px;
+          margin-top: 10px;
+          box-shadow: 0 4px 16px rgba(0,132,240,0.10);
+          transition: background 0.2s, transform 0.2s;
+          cursor: pointer;
+        }
+        .mood-btn:hover, #openMoodModal:hover {
+          background: linear-gradient(90deg, #005fa3 60%, #0084f0 100%);
+          transform: translateY(-2px) scale(1.04);
+        }
+        @media (max-width: 600px) {
+          .modal-content {
+            padding: 22px 6vw 18px 6vw;
+            max-width: 98vw;
+            margin: 18px auto;
+            border-radius: 18px;
+          }
+        }
+        /* Блокировка скролла body при открытом модальном окне */
+        body.modal-open {
+          overflow: hidden !important;
+          touch-action: none;
+        }
     </style>
 </head>
 <body>
 <div class="left-bar">
-    <div class="logo-container">
-        <div class="logo-text">ANSAR</div>
+    <div class="logo-container" style="flex-direction:column;align-items:flex-start;gap:10px;">
+      <div class="logos-row" style="display:flex;align-items:center;gap:12px;">
+        <img src="/image/ansar_logo.png" alt="ANSAR logo" class="logo-img" style="width:44px;height:44px;object-fit:contain;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+        <span style="font-size:2.1rem;font-weight:900;color:#0084f0;">+</span>
+        <img src="/image/ggnty_logo.png" alt="GGNTY logo" class="logo-img" style="width:44px;height:44px;object-fit:contain;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+      </div>
+      <div class="logo-text" style="margin-top:2px;font-size:1.35rem;letter-spacing:1px;">ANSAR + GGNTY</div>
     </div>
     <div class="nav-menu">
         <a href="/" class="nav-item active">
@@ -238,5 +411,29 @@
 {% block content %}
 {% endblock %}
 </div>
+<script>
+// Блокировка скролла body при открытом модальном окне
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+  document.body.classList.add('modal-open');
+}
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
+// Для совместимости с существующими id
+if (document.getElementById('openMoodModal')) {
+  document.getElementById('openMoodModal').onclick = function() { openModal('moodModal'); };
+}
+if (document.getElementById('moodModal')) {
+  var closeBtn = document.querySelector('#moodModal .close');
+  if (closeBtn) closeBtn.onclick = function() { closeModal('moodModal'); };
+}
+// Закрытие по клику вне окна
+window.addEventListener('click', function(e) {
+  var modal = document.getElementById('moodModal');
+  if (modal && e.target === modal) closeModal('moodModal');
+});
+</script>
 </body>
 </html>

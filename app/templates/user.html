@@ -50,46 +50,86 @@
 
 <!-- Модальное окно для определения настроения -->
 <div id="moodModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="document.getElementById('moodModal').style.display='none'">&times;</span>
+    <div class="modal-content" id="moodModalContent">
+        <span class="close" onclick="closeModal('moodModal')">&times;</span>
         <h2>Анкета настроения</h2>
-        <form id="moodForm">
-            <label>1. Как вы себя чувствуете сегодня?</label>
-            <label><input type="radio" name="q1" value="Отлично" required/> Отлично</label>
-            <label><input type="radio" name="q1" value="Хорошо"/> Хорошо</label>
-            <label><input type="radio" name="q1" value="Нормально"/> Нормально</label>
-            <label><input type="radio" name="q1" value="Плохо"/> Плохо</label>
-            <label>2. Какой эмоциональный фон преобладает?</label>
-            <label><input type="checkbox" name="q2" value="Радость"/> Радость</label>
-            <label><input type="checkbox" name="q2" value="Спокойствие"/> Спокойствие</label>
-            <label><input type="checkbox" name="q2" value="Энергия"/> Энергия</label>
-            <label><input type="checkbox" name="q2" value="Меланхолия"/> Меланхолия</label>
-            <label><input type="checkbox" name="q2" value="Усталость"/> Усталость</label>
-            <label>3. Насколько вы сейчас активны?</label>
-            <input type="range" name="q3" min="1" max="10" value="5"/>
-            <label>4. Хотите ли вы чего-то веселого или расслабляющего?</label>
-            <select name="q4">
-                <option value="веселое">Веселое</option>
-                <option value="расслабленное">Расслабленное</option>
-                <option value="нейтральное">Нейтральное</option>
-            </select>
-            <label>5. Какой у вас уровень стресса?</label>
-            <select name="q5">
-                <option value="низкий">Низкий</option>
-                <option value="средний">Средний</option>
-                <option value="высокий">Высокий</option>
-            </select>
-            <label>6. Есть ли у вас желание пообщаться с кем-то?</label>
-            <select name="q6">
-                <option value="да">Да</option>
-                <option value="нет">Нет</option>
-                <option value="неважно">Неважно</option>
-            </select>
-            <button type="submit" style="margin-top:16px;">Определить настроение</button>
+        <div id="moodProgressBar" class="mood-progress-bar"><div class="mood-progress"></div></div>
+        <form id="moodForm" autocomplete="off">
+            <div class="mood-step" id="step-1">
+                <label><b>1. Как вы себя чувствуете сегодня?</b></label>
+                <div class="mood-options">
+                    <label><input type="radio" name="q1" value="Отлично" required/> Отлично</label>
+                    <label><input type="radio" name="q1" value="Хорошо"/> Хорошо</label>
+                    <label><input type="radio" name="q1" value="Нормально"/> Нормально</label>
+                    <label><input type="radio" name="q1" value="Плохо"/> Плохо</label>
+                </div>
+                <button type="button" class="mood-btn" onclick="nextStep(1)">Далее</button>
+            </div>
+            <div class="mood-step" id="step-2" style="display:none;">
+                <label><b>2. Какой эмоциональный фон преобладает?</b></label>
+                <div class="mood-options">
+                    <label><input type="checkbox" name="q2" value="Радость"/> Радость</label>
+                    <label><input type="checkbox" name="q2" value="Спокойствие"/> Спокойствие</label>
+                    <label><input type="checkbox" name="q2" value="Энергия"/> Энергия</label>
+                    <label><input type="checkbox" name="q2" value="Меланхолия"/> Меланхолия</label>
+                    <label><input type="checkbox" name="q2" value="Усталость"/> Усталость</label>
+                </div>
+                <div class="mood-step-nav">
+                    <button type="button" class="mood-btn" onclick="prevStep(2)">Назад</button>
+                    <button type="button" class="mood-btn" onclick="nextStep(2)">Далее</button>
+                </div>
+            </div>
+            <div class="mood-step" id="step-3" style="display:none;">
+                <label><b>3. Насколько вы сейчас активны?</b></label>
+                <input type="range" name="q3" min="1" max="10" value="5" style="width:100%;">
+                <div class="mood-step-nav">
+                    <button type="button" class="mood-btn" onclick="prevStep(3)">Назад</button>
+                    <button type="button" class="mood-btn" onclick="nextStep(3)">Далее</button>
+                </div>
+            </div>
+            <div class="mood-step" id="step-4" style="display:none;">
+                <label><b>4. Хотите ли вы чего-то веселого или расслабляющего?</b></label>
+                <select name="q4" style="width:100%;">
+                    <option value="веселое">Веселое</option>
+                    <option value="расслабленное">Расслабленное</option>
+                    <option value="нейтральное">Нейтральное</option>
+                </select>
+                <div class="mood-step-nav">
+                    <button type="button" class="mood-btn" onclick="prevStep(4)">Назад</button>
+                    <button type="button" class="mood-btn" onclick="nextStep(4)">Далее</button>
+                </div>
+            </div>
+            <div class="mood-step" id="step-5" style="display:none;">
+                <label><b>5. Какой у вас уровень стресса?</b></label>
+                <select name="q5" style="width:100%;">
+                    <option value="низкий">Низкий</option>
+                    <option value="средний">Средний</option>
+                    <option value="высокий">Высокий</option>
+                </select>
+                <div class="mood-step-nav">
+                    <button type="button" class="mood-btn" onclick="prevStep(5)">Назад</button>
+                    <button type="button" class="mood-btn" onclick="nextStep(5)">Далее</button>
+                </div>
+            </div>
+            <div class="mood-step" id="step-6" style="display:none;">
+                <label><b>6. Есть ли у вас желание пообщаться с кем-то?</b></label>
+                <select name="q6" style="width:100%;">
+                    <option value="да">Да</option>
+                    <option value="нет">Нет</option>
+                    <option value="неважно">Неважно</option>
+                </select>
+                <div class="mood-step-nav">
+                    <button type="button" class="mood-btn" onclick="prevStep(6)">Назад</button>
+                    <button type="button" class="mood-btn" onclick="finishMoodForm()">Готово</button>
+                </div>
+            </div>
+            <div class="mood-step" id="step-result" style="display:none; text-align:center;">
+                <h3 id="moodResultText" style="margin-bottom:18px;"></h3>
+                <button type="button" class="mood-btn" onclick="closeMoodResult()">Закрыть</button>
+            </div>
         </form>
     </div>
 </div>
-
 <style>
     .recommendation-form-container {
       max-width: 540px;
@@ -257,13 +297,116 @@
       background: linear-gradient(90deg, #005fa3 60%, #0084f0 100%);
       transform: translateY(-2px) scale(1.02);
     }
+    .mood-step { animation: fadeInStep 0.4s; }
+    @keyframes fadeInStep { from { opacity:0; transform:translateY(30px);} to {opacity:1; transform:none;} }
+    .mood-options { display: flex; flex-direction: column; gap: 10px; margin: 18px 0 18px 0; }
+    .mood-step-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+    #step-result h3 { color: #0084f0; font-size: 1.25rem; font-weight: 800; }
+    .mood-progress-bar { width: 100%; height: 8px; background: rgba(0,132,240,0.10); border-radius: 6px; margin-bottom: 18px; overflow: hidden; }
+    .mood-progress { height: 100%; background: linear-gradient(90deg, #00c6fb 0%, #0084f0 100%); border-radius: 6px; width: 0; transition: width 0.4s cubic-bezier(.4,0,.2,1); box-shadow: 0 2px 8px rgba(0,132,240,0.13); }
+    .mood-options label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+    .mood-options input[type="radio"], .mood-options input[type="checkbox"] {
+      accent-color: #0084f0;
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
+    .mood-options input[type="checkbox"] {
+      border-radius: 6px;
+    }
+    .mood-options select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #b3d8f7;
+      font-size: 1.08rem;
+      background: rgba(255,255,255,0.93);
+      transition: border 0.22s, background 0.22s, box-shadow 0.22s;
+      outline: none;
+      box-shadow: 0 1.5px 8px rgba(0,132,240,0.07), inset 0 1.5px 8px rgba(0,132,240,0.06);
+      margin-bottom: 8px;
+    }
+    .mood-options select:focus {
+      border: 1.5px solid #36a6e6;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(0, 198, 251, 0.13), 0 1.5px 8px rgba(0,132,240,0.07), inset 0 1.5px 8px rgba(0,132,240,0.06);
+    }
 </style>
 
 <script>
-    // Открытие модального окна
-      document.getElementById("openMoodModal").onclick = function() {
-        document.getElementById('moodModal').style.display = 'block';
-      };
+let currentStep = 1;
+const totalSteps = 6;
+function showStep(step) {
+  document.querySelectorAll('.mood-step').forEach(el => el.style.display = 'none');
+  const stepDiv = document.getElementById('step-' + step);
+  if (stepDiv) stepDiv.style.display = '';
+  currentStep = step;
+  // Прогресс-бар
+  const progress = Math.min(step, totalSteps) / totalSteps * 100;
+  document.querySelector('.mood-progress').style.width = progress + '%';
+}
+function nextStep(step) {
+  if (step === 1) {
+    const checked = document.querySelector('input[name="q1"]:checked');
+    if (!checked) return;
+  }
+  if (step === 2) {
+    const checked = document.querySelectorAll('input[name="q2"]:checked');
+    if (checked.length === 0) return;
+  }
+  showStep(step + 1);
+}
+function prevStep(step) {
+  showStep(step - 1);
+}
+function finishMoodForm() {
+  const form = document.getElementById('moodForm');
+  const formData = new FormData(form);
+  const q1 = formData.get('q1');
+  const q2 = formData.getAll('q2');
+  const q3 = Number(formData.get('q3'));
+  const q4 = formData.get('q4');
+  const q5 = formData.get('q5');
+  const q6 = formData.get('q6');
+  let mood = '';
+  // Новая логика: только 4 варианта
+  if (q1 === 'Плохо' || q5 === 'высокий' || (q2.includes('Меланхолия') && q3 <= 4)) {
+    mood = 'Плохое';
+  } else if (q1 === 'Отлично' && q2.includes('Радость') && q3 >= 8 && q5 === 'низкий') {
+    mood = 'Отличное';
+  } else if (
+    (q1 === 'Хорошо' || q2.includes('Радость') || q2.includes('Энергия')) &&
+    q5 !== 'высокий' && q3 >= 5
+  ) {
+    mood = 'Хорошее';
+  } else {
+    mood = 'Нейтральное';
+  }
+  document.getElementById('moodResultText').innerText = 'Ваше настроение: ' + mood;
+  showStep('result');
+  document.querySelector('.mood-progress').style.width = '100%';
+  if(document.getElementById('mood')) {
+    document.getElementById('mood').value = mood;
+  }
+}
+function closeMoodResult() {
+  closeModal('moodModal');
+  setTimeout(()=>showStep(1), 400);
+}
+// Инициализация шага при открытии модального окна
+if (document.getElementById('openMoodModal')) {
+  document.getElementById('openMoodModal').onclick = function() {
+    openModal('moodModal');
+    showStep(1);
+  };
+}
     // Автоопределение города по IP
       async function detectCity() {
         try {
@@ -286,35 +429,7 @@
         document.getElementById('location').value = 'Грозный';
         detectCity();
       });
-    // Определение настроения по анкете
-      document.getElementById("moodForm").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const q1 = formData.get('q1');
-        const q2 = formData.getAll('q2');
-        const q3 = Number(formData.get('q3'));
-        const q4 = formData.get('q4');
-        const q5 = formData.get('q5');
-        const q6 = formData.get('q6');
-        // Логика определения настроения
-        let mood = '';
-        if(q1 === 'Плохо' || q2.includes('Меланхолия') || q2.includes('Усталость') || q3 <= 3 || q5 === 'высокий') {
-          mood = 'Нужна поддержка';
-        } else if(q1 === 'Отлично' && q2.includes('Радость') && q3 >= 8 && q5 === 'низкий') {
-          mood = 'Отличное';
-        } else if(q2.includes('Энергия') && q3 >= 7 && q5 !== 'высокий') {
-          mood = 'Энергичное';
-        } else if(q2.includes('Спокойствие') && q4 === 'расслабленное' && q5 !== 'высокий') {
-          mood = 'Спокойное';
-        } else if(q6 === 'да' && q1 !== 'Плохо') {
-          mood = 'Открыт к общению';
-        } else {
-          mood = 'Нормальное';
-        }
-        document.getElementById('mood').value = mood;
-        document.getElementById('moodModal').style.display = 'none';
-      });
-    <!--// Обработка формы рекомендаций-->
+    <!-- Обработка формы рекомендаций-->
     <!--  document.getElementById("recommendationForm").addEventListener("submit", function(e) {-->
     <!--    e.preventDefault();-->
     <!--    const formData = new FormData(this);-->
