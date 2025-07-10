@@ -2,6 +2,8 @@ version: "3.9"
 
 services:
   fastapi_app:
+    env_file:
+      - .env
     build:
       context: .  # Контекст сборки — корень проекта (видит requirements.txt)
       dockerfile: ./app/Dockerfile  # Путь к Dockerfile внутри папки app
@@ -13,6 +15,8 @@ services:
     restart: always
 
   aiogram_bot:
+    env_file:
+      - .env
     build:
       context: .  # Корень проекта
       dockerfile: ./tg_admin_bot/Dockerfile
