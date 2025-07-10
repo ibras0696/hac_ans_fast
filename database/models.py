@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Float
 
-from db import Base
+from .db import Base
 
 
 # Модель пользователя, соответствующая таблице 'users' в базе данных

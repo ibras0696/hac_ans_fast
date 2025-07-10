@@ -1,27 +1,20 @@
 import os
-
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker, AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
+
+# Формируем абсолютный путь к базе данных
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Корень проекта
+DB_PATH = os.path.join(BASE_DIR, 'database', 'database.db')
+
+DATABASE_URL = f'sqlite+aiosqlite:///{DB_PATH}'
+
+async_engine = create_async_engine(DATABASE_URL, echo=True, pool_size=10)
+AsyncSessionLocal = async_sessionmaker(bind=async_engine, expire_on_commit=False)
 
 
-# Абсолютный путь к БД — работает независимо от того, откуда запущен бот
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # корень проекта
-DB_PATH = os.path.join(BASE_DIR, 'database', "DataBase.db")
-# Абсолютный путь к БД
-DATABASE_URL = f"sqlite+aiosqlite:///{DB_PATH}"
-# Движок БД
-engine = create_async_engine(DATABASE_URL, echo=True)
-
-
+# Базовый класс для моделей
 class Base(AsyncAttrs, DeclarativeBase):
     pass
-
-
-async_session = async_sessionmaker(
-    bind=engine,                 # Привязываем движок к сессии
-    expire_on_commit=False      # Данные не сбрасываются после commit
-)
-
 
 # async def init_db():
 #     """
