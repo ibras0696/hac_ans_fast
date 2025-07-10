@@ -12,19 +12,14 @@ class User(Base):
 
     # Уникальный идентификатор пользователя (первичный ключ)
     id = Column(Integer, primary_key=True, index=True)
-
     # Дата регистрации
     registered_at = Column(DateTime, default=datetime.now(timezone.utc))
-
     # Имя пользователя (уникальное и обязательное поле)
     username = Column(String, unique=True, nullable=False)
-
     # Хешированный пароль (не хранится в открытом виде, обязательно)
     password_hash = Column(String, nullable=False)
-
     # Полное имя пользователя (необязательное поле)
     full_name = Column(String, nullable=True)
-
     # Является ли пользователь модератором (по умолчанию — нет)
     is_moderator = Column(Boolean, default=False)
 
