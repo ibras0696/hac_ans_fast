@@ -9,7 +9,7 @@ services:
       dockerfile: ./app/Dockerfile
     container_name: fastapi_app
     ports:
-      - "600:600"
+      - "8000:8000"
     volumes:
       - ./app:/app
       - ./database:/database  # Монтируем как отдельную корневую папку
