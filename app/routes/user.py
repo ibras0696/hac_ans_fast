@@ -8,12 +8,12 @@ router = APIRouter()
 
 templates = Jinja2Templates(directory=ALL_TEMPLATES_DIR)
 
-
 @router.get("/")
 async def user(request: Request):
 
-    information = ['Movsar', 'Tutuev', '16', 'Ahmat-Yurt']
+    form_data = await request.form()
+
 
     return templates.TemplateResponse(
         "user.html",
-        {"request": request, "title": information})
+        {"request": request, "title": ''})

@@ -15,19 +15,25 @@ async def add_activities(request: Request):
     return templates.TemplateResponse("add_activities.html",
                                       {"request": request})
 
+
+
+
 # Добавление активностей
 @router.post("/add_activities", response_class=HTMLResponse)
 async def add_activities(request: Request):
     form_data = await request.form()
 
+
     title = form_data.get("title"),
     description = form_data.get("description"),
     category = form_data.get("category"),
-    reit = float(form_data.get("reit"))
+    rating = float(form_data.get("rating"))
+    address = form_data.get("address")
+    working_house = form_data.get("working_house")
     # image = float(form_data.get("image"))
 
-    # print(title, description, category, reit, image)
-    print(title, description, category, reit)
+    print(title, description, category, rating, address, working_house)
+    # print(title, description, category, rating, address, image working_house)
 
 
     # Возвращаем ту же страницу с сообщением
@@ -35,8 +41,6 @@ async def add_activities(request: Request):
         "request": request,
         "message": "Активность успешно добавлена!"
     })
-
-
 
 
 
