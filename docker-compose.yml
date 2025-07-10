@@ -5,24 +5,30 @@ services:
     env_file:
       - .env
     build:
-      context: .  # Контекст сборки — корень проекта (видит requirements.txt)
-      dockerfile: ./app/Dockerfile  # Путь к Dockerfile внутри папки app
+      context: .
+      dockerfile: ./app/Dockerfile
     container_name: fastapi_app
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app  # Монтирование только папки app (для разработки)
+      - ./app:/app
+      - ./database:/database  # Монтируем как отдельную корневую папку
+    environment:
+      - PYTHONPATH=/:/app:/database  # Добавляем /database в PYTHONPATH
     restart: always
 
   aiogram_bot:
     env_file:
       - .env
     build:
-      context: .  # Корень проекта
+      context: .
       dockerfile: ./tg_admin_bot/Dockerfile
     container_name: aiogram_bot
     volumes:
-      - ./tg_admin_bot:/app  # Монтирование только папки tg_admin_bot
+      - ./tg_admin_bot:/app
+      - ./database:/database  # Монтируем как отдельную корневую папку
+    environment:
+      - PYTHONPATH=/:/app:/database  # Добавляем /database в PYTHONPATH
     restart: always
     depends_on:
-      - fastapi_app  # Ждём запуска FastAPI
+      - fastapi_app

@@ -1,11 +1,14 @@
 FROM python:3.12-slim
 WORKDIR /app
 
-# Копируем общий requirements.txt из корня проекта
+# Устанавливаем PYTHONPATH
+ENV PYTHONPATH="${PYTHONPATH}:/:/app:/database"
+
+# Копируем зависимости
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем только содержимое папки tg_admin_bot
+# Копируем только код бота
 COPY ./tg_admin_bot .
 
 CMD ["python", "main.py"]
