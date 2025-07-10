@@ -24,8 +24,22 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="reit">Рейтинг</label>
-      <input type="number" step="0.5" id="reit" name="reit" max="5" placeholder="0.00" required>
+      <label for="address">Адрес активности</label>
+      <input type="text" id="address" name="address" placeholder="Введите адрес" required>
+    </div>
+    <div class="form-group">
+      <label for="working_house">Время работы</label>
+      <input type="text" id="working_house" name="working_house" placeholder="Например: 10:00-20:00" required>
+    </div>
+    <div class="form-group">
+      <label for="rating">Рейтинг</label>
+      <select id="rating" name="rating" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
     </div>
     <div class="form-group">
       <label for="image">Фотография активности</label>
@@ -37,8 +51,6 @@
     <button type="submit">Добавить</button>
   </form>
 </div>
-
-
 
 
 <style>

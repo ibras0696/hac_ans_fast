@@ -9,11 +9,18 @@ router = APIRouter()
 templates = Jinja2Templates(directory=ALL_TEMPLATES_DIR)
 
 
+@router.get('/', response_class=HTMLResponse)
+async def check_function_moder(request: Request):
+    return templates.TemplateResponse("main_moderator.html",
+                                      {"request": request})
+
+
 # Переход на страницу активностей
 @router.get("/add_activities", response_class=HTMLResponse)
 async def add_activities(request: Request):
     return templates.TemplateResponse("add_activities.html",
                                       {"request": request})
+
 
 # Добавление активностей
 @router.post("/add_activities", response_class=HTMLResponse)
@@ -23,21 +30,18 @@ async def add_activities(request: Request):
     title = form_data.get("title"),
     description = form_data.get("description"),
     category = form_data.get("category"),
-    reit = float(form_data.get("reit"))
-    # image = float(form_data.get("image"))
+    rating = float(form_data.get("rating"))
+    address = form_data.get("address")
+    working_house = form_data.get("working_house")
+    image = float(form_data.get("image"))
 
-    # print(title, description, category, reit, image)
-    print(title, description, category, reit)
-
+    print(title, description, category, rating, address, working_house)
 
     # Возвращаем ту же страницу с сообщением
     return templates.TemplateResponse("add_activities.html", {
         "request": request,
         "message": "Активность успешно добавлена!"
     })
-
-
-
 
 
 # Просмотр активностей также удаление активностей

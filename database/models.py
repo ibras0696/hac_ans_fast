@@ -62,7 +62,10 @@ class Activity(Base):
     title = Column(String, nullable=False)  # Название активности
     description = Column(String, nullable=False)  # Описание
     category = Column(String, nullable=False)  # Категория (спорт, отдых, образование и т.д.)
-    reit = Column(Float, nullable=False)
+    address = Column(String, nullable=False) # Адрес активности
+    images = Column(String, nullable=False) # Ссылка на фотографию
+    working_hours = Column(String, nullable=False) # Время работы
+    rating = Column(Float, nullable=False)
 
     history = relationship("ActivityHistory", back_populates="activity")
     recommendations = relationship("Recommendation", back_populates="activity")
