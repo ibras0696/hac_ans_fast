@@ -1,11 +1,11 @@
-from datetime import datetime
+import asyncio
 
 from sqlalchemy.ext.asyncio import async_sessionmaker
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import select, update, delete
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
-from models import *
-from database import AsyncSessionLocal
+from database.db import AsyncSessionLocal
+from database.models import *
 
 
 class CrudUser:
@@ -13,17 +13,16 @@ class CrudUser:
         self.session: async_sessionmaker = AsyncSessionLocal
 
     # 1. Добавление пользователя
-    async def add_user(self, username: str, password_hash: str, full_name: str = None,
-                       age: int = None, mood: str = None, city: str = None,
+    async def add_user(self,
+                       username: str,
+                       password_hash: str,
+                       full_name: str = None,
                        is_moderator: bool = False) -> User:
         """
         Создаёт нового пользователя и сохраняет в базе.
         :param username: уникальное имя пользователя
         :param password_hash: хеш пароля
         :param full_name: полное имя (опционально)
-        :param age: возраст (опционально)
-        :param mood: настроение (опционально)
-        :param city: город (опционально)
         :param is_moderator: флаг модератора (по умолчанию False)
         :return: объект User с заполнённым id и временем регистрации
         """
@@ -33,14 +32,10 @@ class CrudUser:
                     username=username,
                     password_hash=password_hash,
                     full_name=full_name,
-                    age=age,
-                    mood=mood,
-                    city=city,
                     is_moderator=is_moderator,
                 )
                 session.add(user)
                 await session.commit()
-                await session.refresh(user)
                 return user
             except SQLAlchemyError as e:
                 await session.rollback()
@@ -121,7 +116,6 @@ class CrudActivity:
                 )
                 session.add(activity)
                 await session.commit()
-                await session.refresh(activity)
                 return activity
             except SQLAlchemyError as e:
                 await session.rollback()
@@ -211,7 +205,6 @@ class CrudPreferences:
                     session.add(prefs)
 
                 await session.commit()
-                await session.refresh(prefs)
                 return prefs
             except SQLAlchemyError as e:
                 await session.rollback()
@@ -277,7 +270,6 @@ class CrudActivityHistory:
                 session.add(history_entry)
                 await session.flush()
                 await session.commit()
-                await session.refresh(history_entry)
                 return history_entry
             except IntegrityError:
                 await session.rollback()
@@ -356,7 +348,6 @@ class CrudRecommendation:
                 conn.add(recommendation)
                 await conn.flush()
                 await conn.commit()
-                await conn.refresh(recommendation)
                 return recommendation
             except IntegrityError:
                 await conn.rollback()
@@ -415,3 +406,11 @@ class CrudRecommendation:
             except SQLAlchemyError as ex:
                 await conn.rollback()
                 raise Exception(f"Ошибка при удалении рекомендации: {ex}")
+
+
+# if __name__ == '__main__':
+#     async def main2():
+#         a = await CrudActivity().list_activities()
+#         print(a)
+#
+#     asyncio.run(main2())
