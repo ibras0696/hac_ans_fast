@@ -15,4 +15,4 @@ DOMEN = os.getenv('DOMEN')
 URL_DOMEN = os.getenv('URL_DOMEN')
 
 # Admin ID
-ADMIN_ID = os.getenv('ADMIN_ID')
+ADMIN_ID = int(os.getenv('ADMIN_ID'))
