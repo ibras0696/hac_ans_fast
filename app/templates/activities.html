@@ -32,18 +32,18 @@
                 <h3 class="activity-title">{{ activity.title }}</h3>
                 <p class="activity-description">{{ activity.description[:100] }}{% if activity.description|length > 100 %}...{% endif %}</p>
 
-                            <div class="activity-meta">
-              <div class="activity-address">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.76-2.24 5-5 5s-5-2.24-5-5z"/>
-                        </svg>
-                {{ activity.address }}
-                    </div>
-              <div class="activity-hours">
-                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                            <div class="activity-meta-row" style="display: flex; justify-content: center; gap: 18px; margin: 16px 0 12px 0;">
+              <div class="activity-address" style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #666; font-size: 1rem; background: #f8f9fa; border-radius: 12px; padding: 10px 0; width: 180px; min-width: 180px; max-width: 180px; white-space: nowrap;">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.76-2.24 5-5 5s-5-2.24-5-5z"/>
+                </svg>
+                <span>{{ activity.address }}</span>
+              </div>
+              <div class="activity-hours" style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #666; font-size: 1rem; background: #f8f9fa; border-radius: 12px; padding: 10px 0; width: 180px; min-width: 180px; max-width: 180px; white-space: nowrap;">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
-                {{ activity.working_hours }}
+                <span>{{ activity.working_hours }}</span>
               </div>
             </div>
 
