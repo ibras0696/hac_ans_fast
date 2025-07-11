@@ -1,8 +1,5 @@
 .idea
 .venv
-database/DataBase.db
-
-database/database.db
 
 # Игнорирования Кэш файлов
 __pycache__/
