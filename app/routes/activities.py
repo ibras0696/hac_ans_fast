@@ -17,11 +17,13 @@ async def activities(request: Request):
         activities_list = await CrudActivity().list_activities()
         return templates.TemplateResponse("activities.html", {
             "request": request,
-            "activities": activities_list
+            "activities": activities_list,
+            "current_user": request.state.current_user
         })
     except Exception as e:
         # В случае ошибки возвращаем пустой список
         return templates.TemplateResponse("activities.html", {
             "request": request,
-            "activities": []
+            "activities": [],
+            "current_user": request.state.current_user
         })

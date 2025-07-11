@@ -2,6 +2,15 @@
 
 {% block content %}
 <div class="activity-form-container">
+  {% if error_message %}
+  <div class="error-notification" style="background: #fee; border: 1px solid #fcc; color: #c33; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle;">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+    </svg>
+    {{ error_message }}
+  </div>
+  {% endif %}
+  
   <form method="post" class="activity-form" enctype="multipart/form-data">
     <h1>Добавление активности</h1>
     <div class="form-group">
@@ -44,12 +53,19 @@
     <div class="form-group">
       <label for="image">Фотография активности</label>
       <input type="file" id="image" name="image" accept="image/*" onchange="previewActivityImage(event)">
+      <div style="font-size: 0.85rem; color: #666; margin-top: 5px;">
+        Поддерживаемые форматы: JPG, PNG, GIF, WebP, SVG. Максимальный размер: 5MB
+      </div>
       <div id="imagePreview" style="margin-top:10px; display:none;">
         <img id="previewImg" src="#" alt="Превью" style="max-width:100%; max-height:180px; border-radius:10px; box-shadow:0 2px 8px rgba(0,132,240,0.10);">
       </div>
     </div>
     <button type="submit">Добавить</button>
-  </form>
+</form>
+</div>
+
+<div style="text-align:center;margin-top:32px;">
+    <a href="/moder" style="display:inline-block;padding:12px 32px;background:linear-gradient(90deg,#0084f0 60%,#00c6fb 100%);color:#fff;font-weight:800;border-radius:10px;text-decoration:none;box-shadow:0 2px 12px #0084f033;transition:background 0.18s;">Вернуться к панели модератора</a>
 </div>
 
 
@@ -157,13 +173,32 @@ function previewActivityImage(event) {
   const input = event.target;
   const preview = document.getElementById('imagePreview');
   const img = document.getElementById('previewImg');
-  if (input.files && input.files[0]) {
+  const file = input.files[0];
+  
+  if (file) {
+    // Проверяем размер файла (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Файл слишком большой. Максимальный размер: 5MB');
+      input.value = '';
+      preview.style.display = 'none';
+      return;
+    }
+    
+    // Проверяем тип файла
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Неподдерживаемый тип файла. Разрешены только изображения.');
+      input.value = '';
+      preview.style.display = 'none';
+      return;
+    }
+    
     const reader = new FileReader();
     reader.onload = function(e) {
       img.src = e.target.result;
       preview.style.display = 'block';
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
   } else {
     img.src = '#';
     preview.style.display = 'none';

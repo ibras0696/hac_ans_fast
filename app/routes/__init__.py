@@ -4,6 +4,7 @@ from .technologies import router as project_technologies_rout
 from .this_comand import router as this_command_rout
 from .activities import router as activities_rout
 from .moder_activities import router as moder_activities
+from .personal_detail import router as personal_detail_rout
 
 from fastapi import APIRouter
 
@@ -20,3 +21,5 @@ router.include_router(this_command_rout, prefix='/this_command')
 router.include_router(activities_rout, prefix='/activities')
 
 router.include_router(moder_activities, prefix='/moder')
+
+router.include_router(personal_detail_rout, prefix='/profile')

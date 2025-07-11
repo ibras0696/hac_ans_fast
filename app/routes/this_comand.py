@@ -11,4 +11,7 @@ templates = Jinja2Templates(directory=ALL_TEMPLATES_DIR)
 
 @router.get("/", response_class=HTMLResponse)
 async def this_command(request: Request):
-    return templates.TemplateResponse("this_command.html", {"request": request})
+    return templates.TemplateResponse("this_command.html", {
+        "request": request,
+        "current_user": request.state.current_user
+    })
