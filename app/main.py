@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.routes import router
 from app.routes.auth import get_current_user_from_cookie
+from database.crud import CrudFavorite, CrudActivity
 
 app = FastAPI()
 
@@ -25,6 +26,17 @@ app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), 
 async def add_user_to_request(request: Request, call_next):
     """Добавляет текущего пользователя в request.state для всех шаблонов"""
     request.state.current_user = await get_current_user_from_cookie(request)
+    # Явно подгружаем избранное, если пользователь есть
+    if request.state.current_user:
+        favorites = await CrudFavorite().get_favorites_by_user(request.state.current_user.id)
+        fav_acts = []
+        for fav in favorites:
+            activity = await CrudActivity().get_activity_by_id(fav.activity_id)
+            if activity:
+                fav_acts.append({"activity": activity, "favorite_id": fav.id, "activity_id": fav.activity_id, "id": fav.id})
+        request.state.favorites = fav_acts
+    else:
+        request.state.favorites = []
     response = await call_next(request)
     return response
 
