@@ -34,6 +34,7 @@ if __name__ == '__main__':
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
     )
     try:
+        asyncio.run(database.init_db())
         asyncio.run(main())
     except TelegramBadRequest as e:
         logging.error(f"Telegram API error: {e}")

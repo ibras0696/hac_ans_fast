@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 import uvicorn
 from fastapi import FastAPI, Request
@@ -7,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.routes import router
 from app.routes.auth import get_current_user_from_cookie
+import database
 
 app = FastAPI()
 
@@ -33,4 +35,5 @@ async def add_user_to_request(request: Request, call_next):
 app.include_router(router)
 
 if __name__ == "__main__":
+    asyncio.run(database.init_db())
     uvicorn.run("main:app", port=8001)  # host="0.0.0.0", port=600)

@@ -5,5 +5,5 @@ from .crud import *
 from .models import *
 
 # Инициализация Базы
-asyncio.run(init_db())
+# asyncio.run(init_db())
 
