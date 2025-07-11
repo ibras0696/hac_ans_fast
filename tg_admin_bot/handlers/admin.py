@@ -48,19 +48,18 @@ async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
             await state.update_data(moder_status=False)
             kb = inline_keyboard_buttons(
                 buttons_dct={
-                    f'{is_moders[i]}': f'del_{is_moders[i]}' for i in range(len(is_moders))
+                    username: f'add_{username}' for username in is_moders
                 },
                 adjust=3
             )
             await call_back.message.answer('Выберите Модера которого хотите убрать', reply_markup=kb)
-
 
         case 'moder_new_moder':
             await state.set_state(RedactModerState.moder_status)
             await state.update_data(moder_status=True)
             kb = inline_keyboard_buttons(
                 buttons_dct={
-                    f'{is_not_moders[i]}': f'add_{is_not_moders[i]}' for i in range(len(is_moders))
+                    username: f'add_{username}' for username in is_not_moders
                 },
                 adjust=3
             )
