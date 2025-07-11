@@ -7,6 +7,8 @@ from aiogram.exceptions import TelegramBadRequest
 
 from config import BOT_TOKEN
 
+import database
+
 
 async def main():
     bot = Bot(token=BOT_TOKEN)

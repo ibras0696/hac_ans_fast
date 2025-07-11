@@ -1,5 +1,5 @@
 import os
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
 
 # Формируем абсолютный путь к базе данных
@@ -13,8 +13,7 @@ AsyncSessionLocal = async_sessionmaker(bind=async_engine, expire_on_commit=False
 
 
 # Базовый класс для моделей
-class Base(AsyncAttrs, DeclarativeBase):
-    pass
+Base = declarative_base()
 
 async def init_db():
     """
