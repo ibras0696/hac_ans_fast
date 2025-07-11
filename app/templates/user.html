@@ -21,7 +21,10 @@
         <div class="form-group">
             <label for="mood">Настроение</label>
             <input type="text" id="mood" name="mood" readonly placeholder="Определите через анкету ниже" style="background:#f0f0f0;cursor:not-allowed;">
-            <button type="button" id="openMoodModal" style="margin-top:8px;">Заполнить анкету настроения</button>
+            <button type="button" id="openMoodModal" style="margin-top:8px;" {% if not current_user %}disabled class="disabled-btn"{% endif %}>Заполнить анкету настроения</button>
+            {% if not current_user %}
+            <div style="color:#e74c3c;font-weight:600;margin-top:8px;">Чтобы заполнить анкету настроения, войдите на сайт!</div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="time">Доступное время (минут)</label>

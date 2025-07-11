@@ -16,13 +16,13 @@
     </div>
     {% endif %}
 
-    {% if list_activities_all %}
+    {% if activities %}
     <div class="activities-grid">
-        {% for activity in list_activities_all %}
+        {% for activity in activities %}
         <div class="activity-card" data-activity-id="{{ activity.id }}">
             <!-- Изображение активности -->
-            <div class="activity-image">
-                {% if activity.images %}
+            <div class="activity-image {% if not activity.images or 'default_image.svg' in activity.images %}no-image{% endif %}">
+                {% if activity.images and 'default_image.svg' not in activity.images %}
                 <img src="{{ activity.images }}" alt="{{ activity.title }}" onerror="this.style.display='none'">
                 {% endif %}
                 <div class="activity-overlay">
@@ -59,20 +59,19 @@
                 <!-- Кнопки действий -->
                 <div class="activity-actions">
 
-                    <a href="{{ url_for('activity_detail', activity_id=activity.id) }}" class="btn-open">
+                    <a href="/activity_detail/{{ activity.id }}" class="btn-open">
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
                         </svg>
                         Открыть
                     </a>
 
-                    <a href="{{ url_for('delete_activity', activity_id=activity.id) }}" class="btn-delete"
-                       onclick="return confirm('Вы уверены, что хотите удалить активность «{{ activity.title }}»?')">
+                    <button onclick="deleteActivity({{ activity.id }})" class="btn-delete" data-activity-title="{{ activity.title }}">
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
                         </svg>
                         Удалить
-                    </a>
+                    </button>
 
                 </div>
             </div>
@@ -90,6 +89,10 @@
         <p>Добавьте первую активность, чтобы начать работу</p>
     </div>
     {% endif %}
+</div>
+
+<div style="text-align:center;margin-top:32px;">
+    <a href="/moder" style="display:inline-block;padding:12px 32px;background:linear-gradient(90deg,#0084f0 60%,#00c6fb 100%);color:#fff;font-weight:800;border-radius:10px;text-decoration:none;box-shadow:0 2px 12px #0084f033;transition:background 0.18s;">Вернуться к панели модератора</a>
 </div>
 
 
@@ -171,8 +174,18 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
-
+    .activity-image.no-image {
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+    }
+    .activity-image:not(.no-image) {
+      background: none;
+    }
     .activity-overlay {
       position: absolute;
       top: 0;
@@ -184,6 +197,10 @@
       justify-content: space-between;
       align-items: flex-start;
       padding: 16px;
+      z-index: 2;
+    }
+    .activity-image:not(.no-image) .activity-overlay {
+      background: none;
     }
 
     .activity-category {
@@ -357,5 +374,47 @@
       }
     `;
     document.head.appendChild(style);
+
+    // Функция для удаления активности
+    async function deleteActivity(activityId) {
+        const button = event.target.closest('.btn-delete');
+        const activityTitle = button.getAttribute('data-activity-title');
+        
+        if (!confirm(`Вы уверены, что хотите удалить активность «${activityTitle}»?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/moder/delete_activity/${activityId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Удаляем карточку активности из DOM с анимацией
+                const activityCard = document.querySelector(`[data-activity-id="${activityId}"]`);
+                if (activityCard) {
+                    activityCard.style.animation = 'fadeOut 0.3s ease-out';
+                    setTimeout(() => {
+                        activityCard.remove();
+                        // Если больше нет активностей, показываем пустое состояние
+                        const remainingCards = document.querySelectorAll('.activity-card');
+                        if (remainingCards.length === 0) {
+                            location.reload();
+                        }
+                    }, 300);
+                }
+            } else {
+                alert(`Ошибка при удалении: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Ошибка при удалении активности:', error);
+            alert('Произошла ошибка при удалении активности');
+        }
+    }
 </script>
 {% endblock %}
