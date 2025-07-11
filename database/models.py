@@ -6,105 +6,83 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, F
 from database import Base
 
 
-# Модель пользователя, соответствующая таблице 'users' в базе данных
 class User(Base):
-    __tablename__ = "users"  # Название таблицы в БД
+    __tablename__ = "users"
 
-    # Уникальный идентификатор пользователя (первичный ключ)
     id = Column(Integer, primary_key=True, index=True)
-    # Дата регистрации
     registered_at = Column(DateTime, default=datetime.now(timezone.utc))
-    # Имя пользователя (уникальное и обязательное поле)
     username = Column(String, unique=True, nullable=False)
-    # Хешированный пароль (не хранится в открытом виде, обязательно)
     password_hash = Column(String, nullable=False)
-    # Полное имя пользователя (необязательное поле)
     full_name = Column(String, nullable=True)
-    # Является ли пользователь модератором (по умолчанию — нет)
     is_moderator = Column(Boolean, default=False)
 
-    # Отношения с другими таблицами
-    preferences = relationship("UserPreferences", back_populates="user", uselist=False)  # 1:1
-    history = relationship("ActivityHistory", back_populates="user")  # 1:N
-    recommendations = relationship("Recommendation", back_populates="user")  # 1:N
+    preferences = relationship("UserPreferences", back_populates="user", uselist=False)
+    history = relationship("ActivityHistory", back_populates="user")
+    recommendations = relationship("Recommendation", back_populates="user")
+    favorites = relationship("Favorite", back_populates="user")
 
 
-# Модель предпочтений пользователя
 class UserPreferences(Base):
     __tablename__ = "preferences"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))  # Связь с пользователем
-    mood = Column(String)  # Настроение пользователя
-    time_available = Column(Integer, default=0)  # Сколько времени есть
-    budget = Column(Integer, default=0)  # Бюджет (низкий, средний, высокий)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    mood = Column(String)
+    time_available = Column(Integer, default=0)
+    budget = Column(Integer, default=0)
 
     user = relationship("User", back_populates="preferences")
 
 
-# Модель активностей (что можно делать)
 class Activity(Base):
     __tablename__ = "activities"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False)  # Название активности
-    description = Column(String, nullable=False)  # Описание
-    category = Column(String, nullable=False)  # Категория (спорт, отдых, образование и т.д.)
-    address = Column(String, nullable=False)  # Адрес активности
-    images = Column(String, nullable=False)  # Ссылка на фотографию
-    working_hours = Column(String, nullable=False)  # Время работы
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    category = Column(String, nullable=False)
+    address = Column(String, nullable=False)
+    images = Column(String, nullable=False)
+    working_hours = Column(String, nullable=False)
     rating = Column(Float, nullable=False)
 
     history = relationship("ActivityHistory", back_populates="activity")
     recommendations = relationship("Recommendation", back_populates="activity")
+    favorites = relationship("Favorite", back_populates="activity")  # Add this relationship
 
 
-# История выполненных активностей
 class ActivityHistory(Base):
     __tablename__ = "activity_history"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     activity_id = Column(Integer, ForeignKey("activities.id"))
-    # Дата регистрации
-    completed_at = Column(DateTime, default=datetime.now(timezone.utc))  # Когда выполнено
+    completed_at = Column(DateTime, default=datetime.now(timezone.utc))
 
-    # Обратная связь
     user = relationship("User", back_populates="history")
     activity = relationship("Activity", back_populates="history")
 
 
-# Модель для хранения рекомендаций
 class Recommendation(Base):
     __tablename__ = "recommendations"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     activity_id = Column(Integer, ForeignKey("activities.id"))
-    recommended_at = Column(DateTime, default=datetime.now(timezone.utc))  # Когда выдана рекомендация
-    accepted = Column(Boolean, default=False)  # Принял ли пользователь рекомендацию
+    recommended_at = Column(DateTime, default=datetime.now(timezone.utc))
+    accepted = Column(Boolean, default=False)
 
     user = relationship("User", back_populates="recommendations")
     activity = relationship("Activity", back_populates="recommendations")
 
 
 class Favorite(Base):
-    __tablename__ = "favorites"  # Название таблицы в базе данных для хранения избранных активностей пользователей
+    __tablename__ = "favorites"
 
     id = Column(Integer, primary_key=True)
-    # Уникальный идентификатор записи в таблице избранного, первичный ключ
-
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    # Внешний ключ на таблицу пользователей — указывает, какой пользователь добавил активность в избранное
-
     activity_id = Column(Integer, ForeignKey("activities.id"), nullable=False)
-    # Внешний ключ на таблицу активностей — указывает, какая активность добавлена в избранное пользователем
-
     added_at = Column(DateTime, default=datetime.now(timezone.utc))
-    # Дата и время добавления активности в избранное, по умолчанию текущая дата и время в UTC
 
     user = relationship("User", back_populates="favorites")
-    # Связь с объектом пользователя, позволяет получить пользователя, добавившего эту запись в избранное
-
-    activity = relationship("Activity", back_populates="favorites")
-    # Связь с объектом активности, позволяет получить информацию об активности, добавленной в избранное
+    activity = relationship("Activity", back_populates="favorites")  # This matches the new relationship in Activity
