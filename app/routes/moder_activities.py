@@ -84,7 +84,7 @@ async def add_activities(request: Request):
                 raise ValueError("Файл пустой")
             
             # Создаем папку для загрузок, если её нет
-            upload_dir = "app/static/uploads"
+            upload_dir = "static/uploads"
             os.makedirs(upload_dir, exist_ok=True)
             
             # Генерируем уникальное имя файла
