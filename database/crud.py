@@ -493,6 +493,76 @@ class CrudFavorite:
                 await session.rollback()
                 raise Exception(f"Ошибка при удалении из избранного: {e}")
 
+
+class CrudReview:
+    def __init__(self):
+        self.session: async_sessionmaker = AsyncSessionLocal
+
+    # 1. Добавление отзыва
+    async def add_review(self, user_id: int, activity_id: int, rating: float, comment: str = None) -> Review:
+        async with self.session() as session:
+            try:
+                review = Review(
+                    user_id=user_id,
+                    activity_id=activity_id,
+                    rating=rating,
+                    comment=comment
+                )
+                session.add(review)
+                await session.commit()
+                return review
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise Exception(f"Ошибка при добавлении отзыва: {e}")
+
+    # 2. Получить отзывы по user_id
+    async def get_reviews_by_user(self, user_id: int) -> list[Review]:
+        async with self.session() as session:
+            result = await session.execute(
+                select(Review).where(Review.user_id == user_id)
+            )
+            return result.scalars().all()
+
+    # 3. Получить отзывы по activity_id
+    async def get_reviews_by_activity(self, activity_id: int) -> list[Review]:
+        async with self.session() as session:
+            result = await session.execute(
+                select(Review).where(Review.activity_id == activity_id)
+            )
+            return result.scalars().all()
+
+    # 4. Удалить отзыв по id
+    async def delete_review(self, review_id: int) -> bool:
+        async with self.session() as session:
+            try:
+                result = await session.execute(select(Review).where(Review.id == review_id))
+                review = result.scalar_one_or_none()
+                if not review:
+                    return False
+                await session.delete(review)
+                await session.commit()
+                return True
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise Exception(f"Ошибка при удалении отзыва: {e}")
+
+    # 5. Обновить комментарий и/или рейтинг
+    async def update_review(self, review_id: int, rating: float = None, comment: str = None) -> bool:
+        async with self.session() as session:
+            try:
+                result = await session.execute(select(Review).where(Review.id == review_id))
+                review = result.scalar_one_or_none()
+                if not review:
+                    return False
+                if rating is not None:
+                    review.rating = rating
+                if comment is not None:
+                    review.comment = comment
+                await session.commit()
+                return True
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise Exception(f"Ошибка при обновлении отзыва: {e}")
 # if __name__ == '__main__':
 #     async def main2():
 #         a = await CrudActivity().list_activities()

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Float, Text
 
 from database import Base
 
@@ -86,3 +86,17 @@ class Favorite(Base):
 
     user = relationship("User", back_populates="favorites")
     activity = relationship("Activity", back_populates="favorites")  # This matches the new relationship in Activity
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    activity_id = Column(Integer, ForeignKey("activities.id"), nullable=False)
+    rating = Column(Float, nullable=False)
+    comment = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+
+    user = relationship("User", backref="reviews")
+    activity = relationship("Activity", backref="reviews")
