@@ -409,6 +409,67 @@ class CrudRecommendation:
                 raise Exception(f"Ошибка при удалении рекомендации: {ex}")
 
 
+class CrudFavorite:
+    def __init__(self):
+        self.session: async_sessionmaker = AsyncSessionLocal
+
+    # 1. Добавление активности в избранное
+    async def add_favorite(self, user_id: int, activity_id: int) -> Favorite:
+        """
+        Добавляет активность в избранное для пользователя.
+        :param user_id: ID пользователя
+        :param activity_id: ID активности
+        :return: объект Favorite с заполнённым id и временем добавления
+        """
+        async with self.session() as session:
+            try:
+                favorite = Favorite(
+                    user_id=user_id,
+                    activity_id=activity_id
+                )
+                session.add(favorite)
+                await session.commit()
+                return favorite
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise Exception(f"Ошибка при добавлении в избранное: {e}")
+
+    # 2. Получить все избранные активности пользователя
+    async def get_favorites_by_user(self, user_id: int) -> list[Favorite]:
+        """
+        Возвращает список избранных активностей пользователя.
+        :param user_id: ID пользователя
+        :return: список объектов Favorite
+        """
+        async with self.session() as session:
+            try:
+                result = await session.execute(
+                    select(Favorite).where(Favorite.user_id == user_id)
+                )
+                favorites = result.scalars().all()
+                return favorites
+            except SQLAlchemyError as e:
+                raise Exception(f"Ошибка при получении избранного пользователя: {e}")
+
+    # 3. Удалить активность из избранного по ID
+    async def remove_favorite(self, favorite_id: int) -> bool:
+        """
+        Удаляет запись избранного по её ID.
+        :param favorite_id: ID записи избранного
+        :return: True, если удаление успешно, иначе False
+        """
+        async with self.session() as session:
+            try:
+                favorite = await session.get(Favorite, favorite_id)
+                if not favorite:
+                    return False
+                await session.delete(favorite)
+                await session.commit()
+                return True
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise Exception(f"Ошибка при удалении из избранного: {e}")
+
 # if __name__ == '__main__':
 #     async def main2():
 #         a = await CrudActivity().list_activities()
