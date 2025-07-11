@@ -71,6 +71,7 @@ async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
 async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
     try:
         user_name = call_back.data.replace('add_', '')
+        print(user_name)
         await CrudUser().set_moderator_status(username=user_name, is_moderator=True)
 
         await call_back.message.delete()
@@ -85,7 +86,7 @@ async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
 async def del_mode_cmd(call_back: CallbackQuery, state: FSMContext):
     try:
         user_name = call_back.data.replace('del_', '')
-
+        print(user_name)
         await CrudUser().set_moderator_status(username=user_name, is_moderator=False)
 
         await call_back.message.delete()
