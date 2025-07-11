@@ -3,6 +3,20 @@
 <div style="max-width: 900px; margin: 40px auto; padding: 24px;">
     <h2 style="color: #0084f0; text-align: center; margin-bottom: 32px; font-size: 2.2rem; letter-spacing: 1px;">Технологии проекта</h2>
     <div style="display: flex; flex-wrap: wrap; gap: 28px; justify-content: center;">
+        {% set technologies = [
+            {"name": "Python", "desc": "Основной язык разработки, асинхронный backend"},
+            {"name": "FastAPI", "desc": "Современный асинхронный backend-фреймворк"},
+            {"name": "Jinja2", "desc": "Гибкий шаблонизатор для HTML-интерфейса"},
+            {"name": "HTML5 & CSS3", "desc": "Современная вёрстка и стилизация UI"},
+            {"name": "SQLAlchemy", "desc": "Асинхронный ORM для работы с БД"},
+            {"name": "SQLite", "desc": "Лёгкая встроенная база данных"},
+            {"name": "Alembic", "desc": "Миграции и контроль версий БД"},
+            {"name": "Docker", "desc": "Контейнеризация приложения"},
+            {"name": "Docker Compose", "desc": "Оркестрация сервисов и инфраструктуры"},
+            {"name": "Nginx", "desc": "Веб-сервер для продакшн и отдачи статики"},
+            {"name": "aiogram (Telegram Bot)", "desc": "Бот для админки и интеграции"},
+            {"name": "JWT", "desc": "Безопасная авторизация через токены/cookies"}
+        ] %}
         {% for tech in technologies %}
         <div style="background: #fff; border-radius: 18px; box-shadow: 0 2px 16px rgba(0,132,240,0.07); padding: 32px 28px; min-width: 220px; max-width: 260px; flex: 1 1 220px; display: flex; flex-direction: column; align-items: center; transition: box-shadow 0.2s; border: 1.5px solid #f0f4fa;">
             <div style="font-size: 2.2rem; color: #0084f0; margin-bottom: 12px;">
@@ -14,26 +28,22 @@
                     <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 32h16M24 16v16" stroke="#e09c2b" stroke-width="3" stroke-linecap="round"/></svg>
                 {% elif tech.name == 'HTML5 & CSS3' %}
                     <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 16h16l-2 16-6 2-6-2-2-16z" fill="#0084f0"/><path d="M24 34v-8" stroke="#fff" stroke-width="2"/></svg>
-                {% elif tech.name == 'JavaScript' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 32l8-16 8 16" stroke="#f7e018" stroke-width="3" stroke-linecap="round"/></svg>
-                {% elif tech.name == 'Telegram Bot API' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 32l16-16M16 32l8-4 4 4 4-16" stroke="#229ED9" stroke-width="2.2" stroke-linecap="round"/></svg>
-                {% elif tech.name == 'WeatherAPI' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M24 12c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6z" fill="#4A90E2"/><path d="M24 24c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6z" fill="#4A90E2"/><path d="M12 18c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6z" fill="#4A90E2"/><path d="M36 18c-3.314 0-6 2.686-6 6s2.686 6 6 6 6-2.686 6-6-2.686-6-6-6z" fill="#4A90E2"/></svg>
-                {% elif tech.name == 'Парсинг' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 16h16v16H16z" fill="#FF6B35"/><path d="M20 20h8v4h-8z" fill="#fff"/><path d="M20 26h8v2h-8z" fill="#fff"/><path d="M20 30h4v2h-4z" fill="#fff"/><path d="M26 30h2v2h-2z" fill="#fff"/></svg>
+                {% elif tech.name == 'SQLAlchemy' %}
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><rect x="16" y="16" width="16" height="16" rx="4" stroke="#d32d2f" stroke-width="3"/><circle cx="24" cy="24" r="3" fill="#d32d2f"/></svg>
+                {% elif tech.name == 'SQLite' %}
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><ellipse cx="24" cy="24" rx="10" ry="14" stroke="#336791" stroke-width="3"/><circle cx="24" cy="24" r="3" fill="#336791"/></svg>
+                {% elif tech.name == 'Alembic' %}
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 32l8-16 8 16" stroke="#0084f0" stroke-width="3" stroke-linecap="round"/></svg>
                 {% elif tech.name == 'Docker' %}
                     <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 16h16v16H16z" fill="#2496ED"/><path d="M20 20h8v8h-8z" fill="#fff"/><path d="M16 20h4v4h-4z" fill="#fff"/><path d="M20 28h8v4h-8z" fill="#fff"/></svg>
                 {% elif tech.name == 'Docker Compose' %}
                     <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M12 12h8v8h-8z" fill="#2496ED"/><path d="M20 12h8v8h-8z" fill="#2496ED"/><path d="M28 12h8v8h-8z" fill="#2496ED"/><path d="M12 22h8v8h-8z" fill="#2496ED"/><path d="M20 22h8v8h-8z" fill="#2496ED"/><path d="M28 22h8v8h-8z" fill="#2496ED"/></svg>
-                {% elif tech.name == 'Docker YAML' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 16h16v16H16z" fill="#2496ED"/><path d="M20 20h8v8h-8z" fill="#fff"/><path d="M20 20h2v2h-2z" fill="#2496ED"/><path d="M24 20h2v2h-2z" fill="#2496ED"/><path d="M28 20h2v2h-2z" fill="#2496ED"/><path d="M20 24h2v2h-2z" fill="#2496ED"/><path d="M24 24h2v2h-2z" fill="#2496ED"/><path d="M28 24h2v2h-2z" fill="#2496ED"/></svg>
-                {% elif tech.name == 'PostgreSQL' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><ellipse cx="24" cy="24" rx="10" ry="14" stroke="#336791" stroke-width="3"/><circle cx="24" cy="24" r="3" fill="#336791"/></svg>
-                {% elif tech.name == 'SQLAlchemy' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><rect x="16" y="16" width="16" height="16" rx="4" stroke="#d32d2f" stroke-width="3"/><circle cx="24" cy="24" r="3" fill="#d32d2f"/></svg>
-                {% elif tech.name == 'Alembic' %}
-                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 32l8-16 8 16" stroke="#0084f0" stroke-width="3" stroke-linecap="round"/></svg>
+                {% elif tech.name == 'Nginx' %}
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><polygon points="24,12 36,36 12,36" fill="#009639"/><text x="24" y="32" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">N</text></svg>
+                {% elif tech.name == 'aiogram (Telegram Bot)' %}
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><path d="M16 32l16-16M16 32l8-4 4 4 4-16" stroke="#229ED9" stroke-width="2.2" stroke-linecap="round"/></svg>
+                {% elif tech.name == 'JWT' %}
+                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><circle cx="24" cy="24" r="10" stroke="#0084f0" stroke-width="3"/><path d="M24 18v6l4 4" stroke="#0084f0" stroke-width="2" stroke-linecap="round"/></svg>
                 {% else %}
                     <svg width="36" height="36" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#f8f9fa"/><circle cx="24" cy="24" r="10" stroke="#0084f0" stroke-width="3"/></svg>
                 {% endif %}
