@@ -67,43 +67,23 @@ async def add_activities(request: Request):
 
     if image_file and hasattr(image_file, 'filename') and image_file.filename:
         try:
-            # Проверяем тип файла
+            # Проверяем только тип файла
             allowed_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'}
             file_extension = os.path.splitext(image_file.filename)[1].lower()
-
             if file_extension not in allowed_extensions:
                 raise ValueError(f"Неподдерживаемый тип файла: {file_extension}")
-
-            # Проверяем размер файла (максимум 5MB)
-            file_content = await image_file.read()
-            if len(file_content) > 5 * 1024 * 1024:  # 5MB
-                raise ValueError("Файл слишком большой. Максимальный размер: 5MB")
-
-            # Проверяем, что файл не пустой
-            if len(file_content) == 0:
-                raise ValueError("Файл пустой")
-
-            # Создаем папку для загрузок, если её нет
             from app.static import ALL_STATIC_DIR
             upload_dir = f"{ALL_STATIC_DIR}/uploads"
             os.makedirs(upload_dir, exist_ok=True)
-
-            # Генерируем уникальное имя файла
             unique_filename = f"{uuid.uuid4()}{file_extension}"
             file_path = os.path.join(upload_dir, unique_filename)
-
-            # Сохраняем файл
+            file_content = await image_file.read()
             with open(file_path, "wb") as f:
                 f.write(file_content)
-
-            # Устанавливаем путь для базы данных
             images = f"/static/uploads/{unique_filename}"
-
         except Exception as e:
-            # В случае ошибки используем изображение по умолчанию
             images = "/static/default_image.svg"
             print(f"Ошибка при сохранении файла: {e}")
-            # Возвращаем ошибку пользователю
             return templates.TemplateResponse("add_activities.html", {
                 "request": request,
                 "error_message": f"Ошибка при загрузке файла: {str(e)}",

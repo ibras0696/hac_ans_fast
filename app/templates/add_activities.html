@@ -177,9 +177,7 @@ function previewActivityImage(event) {
   const file = input.files[0];
   
   if (file) {
-    // Проверяем размер файла (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Файл слишком большой. Максимальный размер: 5MB');
+    if (file.size > 50 * 1024 * 1024) {
       input.value = '';
       preview.style.display = 'none';
       return;
