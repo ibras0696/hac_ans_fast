@@ -27,45 +27,6 @@ async def admin_start_cmd(message: Message, state: FSMContext):
     )
 
 
-@router.callback_query(F.data, AdminCallBackFilter())
-async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
-    dt_call = call_back.data
-    users = await CrudUser().list_users()
-
-    is_not_moders = []
-    is_moders = []
-
-    for user in users:
-        if user.is_moderator:
-            is_moders.append(user.username)
-        else:
-            is_not_moders.append(user.username)
-
-
-    match dt_call:
-        case 'moder_delete_moder':
-            await state.set_state(RedactModerState.moder_status)
-            await state.update_data(moder_status=False)
-            kb = inline_keyboard_buttons(
-                buttons_dct={
-                    username: f'add_{username}' for username in is_moders
-                },
-                adjust=3
-            )
-            await call_back.message.answer('Выберите Модера которого хотите убрать', reply_markup=kb)
-
-        case 'moder_new_moder':
-            await state.set_state(RedactModerState.moder_status)
-            await state.update_data(moder_status=True)
-            kb = inline_keyboard_buttons(
-                buttons_dct={
-                    username: f'add_{username}' for username in is_not_moders
-                },
-                adjust=3
-            )
-            await call_back.message.answer('Выберите Пользователя которого хотите сделать модератором', reply_markup=kb)
-
-
 @router.callback_query(F.data.startswith('add_'))
 async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
     try:
@@ -90,3 +51,42 @@ async def del_mode_cmd(call_back: CallbackQuery, state: FSMContext):
         await call_back.message.answer(f'Ошибка: {ex}')
     finally:
         await state.clear()
+
+
+@router.callback_query(F.data, AdminCallBackFilter())
+async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
+    dt_call = call_back.data
+    users = await CrudUser().list_users()
+
+    is_not_moders = []
+    is_moders = []
+
+    for user in users:
+        if user.is_moderator:
+            is_moders.append(user.username)
+        else:
+            is_not_moders.append(user.username)
+
+
+    match dt_call:
+        case 'moder_delete_moder':
+            await state.set_state(RedactModerState.moder_status)
+            await state.update_data(moder_status=False)
+            kb = inline_keyboard_buttons(
+                buttons_dct={
+                    username: f'del_{username}' for username in is_moders
+                },
+                adjust=3
+            )
+            await call_back.message.answer('Выберите Модера которого хотите убрать', reply_markup=kb)
+
+        case 'moder_new_moder':
+            await state.set_state(RedactModerState.moder_status)
+            await state.update_data(moder_status=True)
+            kb = inline_keyboard_buttons(
+                buttons_dct={
+                    username: f'add_{username}' for username in is_not_moders
+                },
+                adjust=3
+            )
+            await call_back.message.answer('Выберите Пользователя которого хотите сделать модератором', reply_markup=kb)
