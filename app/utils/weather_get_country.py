@@ -87,10 +87,10 @@ async def pars_weather_country(city: str) -> list:
     """
     async with aiohttp.ClientSession() as session:
         lat, lon = await get_coordinates(city, session)
-
         if lat is None or lon is None:
             return []
-
+        if lat is None or lon is None:
+            return []
         weather = await get_weather(lat, lon, session)
         if not weather:
             return []

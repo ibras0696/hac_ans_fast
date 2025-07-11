@@ -27,6 +27,35 @@ async def admin_start_cmd(message: Message, state: FSMContext):
     )
 
 
+@router.callback_query(F.data.startswith('add_'))
+async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
+    try:
+        user_name = call_back.data.replace('add_', '')
+        await CrudUser().set_moderator_status(username=user_name, is_moderator=True)
+
+        await call_back.message.delete()
+
+        await call_back.message.answer(f'Пользователь: {user_name} добавлен в роли модера')
+    except Exception as ex:
+        await call_back.message.answer(f'Ошибка: {ex}')
+    finally:
+        await state.clear()
+
+@router.callback_query(F.data.startswith('del_'))
+async def del_mode_cmd(call_back: CallbackQuery, state: FSMContext):
+    try:
+        user_name = call_back.data.replace('del_', '')
+        await CrudUser().set_moderator_status(username=user_name, is_moderator=False)
+
+        await call_back.message.delete()
+
+        await call_back.message.answer(f'Пользователь: {user_name} удален из роли модера')
+    except Exception as ex:
+        await call_back.message.answer(f'Ошибка: {ex}')
+    finally:
+        await state.clear()
+
+
 @router.callback_query(F.data, AdminCallBackFilter())
 async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
     dt_call = call_back.data
@@ -48,51 +77,19 @@ async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
             await state.update_data(moder_status=False)
             kb = inline_keyboard_buttons(
                 buttons_dct={
-                    f'{is_moders[i]}': f'del_{is_moders[i]}' for i in range(len(is_moders))
+                    username: f'del_{username}' for username in is_moders
                 },
                 adjust=3
             )
             await call_back.message.answer('Выберите Модера которого хотите убрать', reply_markup=kb)
-
 
         case 'moder_new_moder':
             await state.set_state(RedactModerState.moder_status)
             await state.update_data(moder_status=True)
             kb = inline_keyboard_buttons(
                 buttons_dct={
-                    f'{is_not_moders[i]}': f'add_{is_not_moders[i]}' for i in range(len(is_moders))
+                    username: f'add_{username}' for username in is_not_moders
                 },
                 adjust=3
             )
             await call_back.message.answer('Выберите Пользователя которого хотите сделать модератором', reply_markup=kb)
-
-
-@router.callback_query(F.data.startswith('add_'), RedactModerState.moder_status)
-async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
-    try:
-        user_name = call_back.data.replace('add_', '')
-        print(user_name)
-        await CrudUser().set_moderator_status(username=user_name, is_moderator=True)
-
-        await call_back.message.delete()
-
-        await call_back.message.answer(f'Пользователь: {user_name} добавлен в роли модера')
-    except Exception as ex:
-        await call_back.message.answer(f'Ошибка: {ex}')
-    finally:
-        await state.clear()
-
-@router.callback_query(F.data.startswith('del_'), RedactModerState.moder_status)
-async def del_mode_cmd(call_back: CallbackQuery, state: FSMContext):
-    try:
-        user_name = call_back.data.replace('del_', '')
-        print(user_name)
-        await CrudUser().set_moderator_status(username=user_name, is_moderator=False)
-
-        await call_back.message.delete()
-
-        await call_back.message.answer(f'Пользователь: {user_name} удален из роли модера')
-    except Exception as ex:
-        await call_back.message.answer(f'Ошибка: {ex}')
-    finally:
-        await state.clear()
