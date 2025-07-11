@@ -86,3 +86,25 @@ class Recommendation(Base):
 
     user = relationship("User", back_populates="recommendations")
     activity = relationship("Activity", back_populates="recommendations")
+
+
+class Favorite(Base):
+    __tablename__ = "favorites"  # Название таблицы в базе данных для хранения избранных активностей пользователей
+
+    id = Column(Integer, primary_key=True)
+    # Уникальный идентификатор записи в таблице избранного, первичный ключ
+
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    # Внешний ключ на таблицу пользователей — указывает, какой пользователь добавил активность в избранное
+
+    activity_id = Column(Integer, ForeignKey("activities.id"), nullable=False)
+    # Внешний ключ на таблицу активностей — указывает, какая активность добавлена в избранное пользователем
+
+    added_at = Column(DateTime, default=datetime.now(timezone.utc))
+    # Дата и время добавления активности в избранное, по умолчанию текущая дата и время в UTC
+
+    user = relationship("User", back_populates="favorites")
+    # Связь с объектом пользователя, позволяет получить пользователя, добавившего эту запись в избранное
+
+    activity = relationship("Activity", back_populates="favorites")
+    # Связь с объектом активности, позволяет получить информацию об активности, добавленной в избранное
