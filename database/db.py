@@ -16,9 +16,9 @@ AsyncSessionLocal = async_sessionmaker(bind=async_engine, expire_on_commit=False
 class Base(AsyncAttrs, DeclarativeBase):
     pass
 
-# async def init_db():
-#     """
-#     Инициализация базы данных: создание таблиц.
-#     """
-#     async with engine.begin() as conn:
-#         await conn.run_sync(Base.metadata.create_all)
+async def init_db():
+    """
+    Инициализация базы данных: создание таблиц.
+    """
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
