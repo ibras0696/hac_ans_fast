@@ -14,7 +14,7 @@ from database import CrudUser
 router = Router()
 
 
-@router.message(Command(), AdminTypeFilter())
+@router.message(Command('start'), AdminTypeFilter())
 async def admin_start_cmd(message: Message, state: FSMContext):
     # Очистка состояний
     await state.clear()
