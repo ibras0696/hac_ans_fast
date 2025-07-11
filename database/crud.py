@@ -87,17 +87,17 @@ class CrudUser:
         :param is_moderator: новый статус модератора
         :return: True, если обновление прошло успешно, False если пользователь не найден
         """
-        async with self.session() as session:
+        async with self.session() as conn:
             try:
-                result = await session.execute(select(User).where(User.username == username))
+                result = await conn.execute(select(User).where(User.username == username))
                 user = result.scalar_one_or_none()
                 if not user:
                     return False
                 user.is_moderator = is_moderator
-                await session.commit()
+                await conn.commit()
                 return True
             except SQLAlchemyError as e:
-                await session.rollback()
+                await conn.rollback()
                 raise Exception(f"Ошибка при обновлении статуса модератора: {e}")
 
 
