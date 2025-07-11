@@ -66,11 +66,11 @@ async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
             await call_back.message.answer('Выберите Пользователя которого хотите сделать модератором', reply_markup=kb)
 
 
-@router.callback_query(F.data.startswith('add_'), RedactModerState.moder_status)
+@router.callback_query(F.data.startswith('add_'))
 async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
     try:
         user_name = call_back.data.replace('add_', '')
-        #await CrudUser().set_moderator_status(username=user_name, is_moderator=True)
+        await CrudUser().set_moderator_status(username=user_name, is_moderator=True)
 
         await call_back.message.answer(f'Пользователь: {user_name} добавлен в роли модера')
     except Exception as ex:
@@ -78,11 +78,11 @@ async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
     finally:
         await state.clear()
 
-@router.callback_query(F.data.startswith('del_'), RedactModerState.moder_status)
+@router.callback_query(F.data.startswith('del_'))
 async def del_mode_cmd(call_back: CallbackQuery, state: FSMContext):
     try:
         user_name = call_back.data.replace('del_', '')
-        #await CrudUser().set_moderator_status(username=user_name, is_moderator=False)
+        await CrudUser().set_moderator_status(username=user_name, is_moderator=False)
 
 
         await call_back.message.answer(f'Пользователь: {user_name} удален из роли модера')
