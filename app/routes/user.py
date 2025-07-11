@@ -1,12 +1,10 @@
-import os
-import uuid
-from fastapi import APIRouter, Request, Form
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
 from app.templates import ALL_TEMPLATES_DIR
 from database import CrudActivity
-from database.crud import CrudUser
+from app.utils.weather_get_country import pars_weather_country
 
 router = APIRouter()
 
@@ -73,6 +71,7 @@ async def activity_detail(request: Request, activity_id: int):
             "activity": None,
             "reviews": []
         })
+
 
 # Добавление отзыва
 @router.post("/add_review", response_class=JSONResponse)

@@ -24,7 +24,7 @@ WEATHER_CODES = {
 }
 
 
-async def get_coordinates(city: str) -> tuple[float, float] | tuple[None, None]:
+async def get_coordinates(city: str, session: aiohttp.ClientSession) -> tuple[float, float] | tuple[None, None]:
     """
     Получает координаты (широту и долготу) по названию города с использованием API Maps.co.
 
@@ -33,22 +33,21 @@ async def get_coordinates(city: str) -> tuple[float, float] | tuple[None, None]:
     """
     url = f"https://geocode.maps.co/search?q={city}&api_key={API_KEY}"
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, timeout=10) as response:
-                response.raise_for_status()
-                data = await response.json()
-                if not data:
-                    return None, None
-                lat = float(data[0]['lat'])
-                lon = float(data[0]['lon'])
-                return lat, lon
+        async with session.get(url, timeout=10) as response:
+            response.raise_for_status()
+            data = await response.json()
+            if not data:
+                return None, None
+            lat = float(data[0]['lat'])
+            lon = float(data[0]['lon'])
+            return lat, lon
     except (aiohttp.ClientError, asyncio.TimeoutError):
         return None, None
     except (KeyError, ValueError):
         return None, None
 
 
-async def get_weather(lat: float, lon: float) -> dict:
+async def get_weather(lat: float, lon: float, session: aiohttp.ClientSession) -> dict:
     """
     Получает текущую погоду по координатам с API Open-Meteo.
 
@@ -61,11 +60,10 @@ async def get_weather(lat: float, lon: float) -> dict:
         f"?latitude={lat}&longitude={lon}&current_weather=true"
     )
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, timeout=10) as response:
-                response.raise_for_status()
-                data = await response.json()
-                return data.get("current_weather", {})
+        async with session.get(url, timeout=10) as response:
+            response.raise_for_status()
+            data = await response.json()
+            return data.get("current_weather", {})
     except (aiohttp.ClientError, asyncio.TimeoutError):
         return {}
     except KeyError:
@@ -87,13 +85,15 @@ async def pars_weather_country(city: str) -> list:
         time            # str | None: Время обновления данных в формате ISO 8601 (например, "2025-07-11T14:00")
     ]
     """
-    lat, lon = await get_coordinates(city)
-    if lat is None or lon is None:
-        return []
+    async with aiohttp.ClientSession() as session:
+        lat, lon = await get_coordinates(city, session)
 
-    weather = await get_weather(lat, lon)
-    if not weather:
-        return []
+        if lat is None or lon is None:
+            return []
+
+        weather = await get_weather(lat, lon, session)
+        if not weather:
+            return []
 
     code = weather.get("weathercode")
     description = WEATHER_CODES.get(code, "Неизвестная погода")
