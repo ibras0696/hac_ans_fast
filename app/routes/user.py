@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from app.templates import ALL_TEMPLATES_DIR
 from database import CrudActivity
-from app.utils.weather_get_country import pars_weather_country
 
 router = APIRouter()
 
@@ -22,7 +21,7 @@ async def user(request: Request):
 
 
 @router.post("/")
-async def user(request: Request):
+async def user_post(request: Request):
     form_data = await request.form()
 
     weather = form_data.get('weather')  # Получение погоды.
@@ -34,13 +33,9 @@ async def user(request: Request):
 
     print(weather, timeoftoday, mood, time, budget, location)
 
-    return templates.TemplateResponse(
-        "user.html",
-        {
-            "request": request,
-            "message": 'Данные успешно отправлены!',
-            "current_user": request.state.current_user
-        })
+    # Передаём критерии через query параметры
+    url = f"/recommendations/my_recommendations?mood={mood}&time={time}&budget={budget}&location={location}"
+    return RedirectResponse(url=url, status_code=303)
 
 
 # Детальная страница активности

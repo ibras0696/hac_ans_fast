@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="activities-container">
+    <div class="activities-header">
+        <h1>Персональные рекомендации</h1>
+        <p>Подобрано специально для вас по вашему настроению, времени и бюджету</p>
+    </div>
+
+    {% if message %}
+    <div class="empty-block">{{ message }}</div>
+    {% endif %}
+
+    {% if recommendations %}
+    <div class="activities-grid">
+        {% for activity in recommendations %}
+        <div class="activity-card">
+            <!-- Изображение активности -->
+            <div class="activity-image {% if not activity.images or 'default_image.svg' in activity.images %}no-image{% endif %}">
+                {% if activity.images and 'default_image.svg' not in activity.images %}
+                <img src="{{ activity.images }}" onerror="this.style.display='none'">
+                {% endif %}
+                <div class="activity-overlay">
+                    <div class="activity-category">{{ activity.category }}</div>
+                    <div class="activity-rating">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        {{ "%.1f"|format(activity.rating) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Контент карточки -->
+            <div class="activity-content">
+                <h3 class="activity-title">{{ activity.title }}</h3>
+                <p class="activity-description">{{ activity.description[:100] }}{% if activity.description|length > 100 %}...{% endif %}</p>
+
+                <div class="activity-meta-row">
+                    <div class="activity-address">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.76-2.24 5-5 5s-5-2.24-5-5z"/>
+                        </svg>
+                        <span>{{ activity.address }}</span>
+                    </div>
+                    <div class="activity-hours">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <span>{{ activity.working_hours }}</span>
+                    </div>
+                </div>
+
+                <!-- Кнопка открыть -->
+                <div class="activity-actions">
+                    <a href="{{ url_for('activity_detail', activity_id=activity.id) }}" class="btn-open">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                        Открыть
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <svg width="80" height="80" fill="none" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#0084f0" stroke-width="2"/>
+            </svg>
+        </div>
+        <h2>Рекомендации не найдены</h2>
+        <p>Попробуйте изменить параметры поиска или загляните позже!</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .activities-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .activities-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .activities-header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .activities-header p {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .activity-card {
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 132, 240, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      border: 1px solid rgba(0, 132, 240, 0.08);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 48px rgba(0, 132, 240, 0.15);
+    }
+
+    .activity-image {
+      height: 200px;
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .activity-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .activity-image.no-image {
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+    }
+    .activity-image:not(.no-image) {
+      background: none;
+    }
+    .activity-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 132, 240, 0.8) 0%, rgba(0, 198, 251, 0.8) 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 16px;
+      z-index: 2;
+    }
+    .activity-image:not(.no-image) .activity-overlay {
+      background: none;
+    }
+
+    .activity-category {
+      background: rgba(255, 255, 255, 0.95);
+      color: #0084f0;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+    }
+
+    .activity-rating {
+      background: rgba(255, 255, 255, 0.95);
+      color: #f39c12;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+    }
+
+    .activity-content {
+      padding: 24px;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .activity-description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .activity-meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin: 16px 0 12px 0;
+    }
+
+    .activity-address, .activity-hours {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #666;
+      font-size: 1rem;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 10px 0;
+      width: 180px;
+      min-width: 180px;
+      max-width: 180px;
+      white-space: nowrap;
+    }
+
+    .activity-actions {
+      margin-top: auto;
+    }
+
+    .btn-open {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-open:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 132, 240, 0.3);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .empty-icon {
+      margin-bottom: 24px;
+    }
+
+    .empty-state h2 {
+      font-size: 2rem;
+      color: #222;
+      margin-bottom: 16px;
+    }
+
+    .empty-state p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .activities-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .activities-header h1 {
+        font-size: 2.5rem;
+      }
+
+      .activity-meta-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .activity-address, .activity-hours {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+</style>
+{% endblock %}

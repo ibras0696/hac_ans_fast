@@ -192,6 +192,19 @@ class CrudActivity:
             )
             return result.scalars().all()
 
+    async def get_best_activities_for_user(self, mood: str, time_available: int, budget: int) -> list:
+        async with self.session() as session:
+            result = await session.execute(select(Activity))
+            activities = result.scalars().all()
+            filtered = [
+                act for act in activities
+                if (mood.lower() in act.title.lower() or mood.lower() in act.description.lower())
+                and (time_available >= 0 and int(act.working_hours.split('-')[1]) - int(act.working_hours.split('-')[0]) <= time_available)
+                and (budget >= 0)
+            ]
+            filtered = sorted(filtered, key=lambda x: x.rating, reverse=True)[:4]
+            return filtered
+
 
 class CrudPreferences:
     def __init__(self):

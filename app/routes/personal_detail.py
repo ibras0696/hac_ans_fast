@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.templates import ALL_TEMPLATES_DIR
 from database.crud import CrudUser, CrudActivityHistory, CrudPreferences, CrudRecommendation, CrudActivity
+from datetime import datetime, timezone
 
 router = APIRouter()
 
@@ -22,34 +23,24 @@ async def personal_detail(request: Request, user_id: int):
             return RedirectResponse(url="/", status_code=302)
         # Получаем историю активностей пользователя
         history = await CrudActivityHistory().get_history_by_user_id(user_id)
-        # Получаем рекомендации пользователя
-        recommendations = await CrudRecommendation().get_recommendations_by_user(user_id)
-        # Получаем детали активностей для истории
-        activities_details = []
-        for hist in history:
-            activity = await CrudActivity().get_activity_by_id(hist.activity_id)
-            if activity:
-                activities_details.append({
-                    'history': hist,
-                    'activity': activity
-                })
-        # Получаем детали активностей для рекомендаций
-        recommendations_details = []
-        for rec in recommendations:
-            activity = await CrudActivity().get_activity_by_id(rec.activity_id)
-            if activity:
-                recommendations_details.append({
-                    'recommendation': rec,
-                    'activity': activity
+        # Получаем рекомендации пользователя (вся история)
+        recs = await CrudRecommendation().get_recommendations_by_user(user_id)
+        recommendations = []
+        for rec in recs:
+            act = await CrudActivity().get_activity_by_id(rec.activity_id)
+            if act:
+                recommendations.append({
+                    'activity': act,
+                    'recommendation': rec
                 })
         # Получаем избранные из request.state.favorites (если есть)
         favorites = getattr(request.state, 'favorites', [])
         return templates.TemplateResponse("personal_detail.html", {
             "request": request,
             "user": user,
-            "history": activities_details,
+            "history": history,
             "favorites": favorites,
-            "recommendations": recommendations_details,
+            "recommendations": recommendations,
             "current_user": request.state.current_user
         })
     except Exception as e:

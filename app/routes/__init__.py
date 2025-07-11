@@ -6,6 +6,7 @@ from .activities import router as activities_rout
 from .moder_activities import router as moder_activities
 from .personal_detail import router as personal_detail_rout
 from .favorites import router as favorites_rout
+from .recommendations import router as recommendations_rout
 
 from fastapi import APIRouter
 
@@ -26,3 +27,5 @@ router.include_router(moder_activities, prefix='/moder')
 router.include_router(personal_detail_rout, prefix='/profile')
 
 router.include_router(favorites_rout, prefix='/favorites')
+
+router.include_router(recommendations_rout, prefix='/recommendations')
