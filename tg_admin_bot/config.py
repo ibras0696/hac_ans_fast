@@ -13,3 +13,6 @@ DOMEN = os.getenv('DOMEN')
 
 # Ссылка на сайт
 URL_DOMEN = os.getenv('URL_DOMEN')
+
+# Admin ID
+ADMIN_ID = os.getenv('ADMIN_ID')

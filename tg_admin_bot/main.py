@@ -7,16 +7,20 @@ from aiogram.exceptions import TelegramBadRequest
 
 from config import BOT_TOKEN
 
+from middlawares import ErrorMiddleware
+
+from handlers import router
+
 
 async def main():
     bot = Bot(token=BOT_TOKEN)
     dp = Dispatcher()
 
     # Подключаем middleware ОДИН раз на все события
-    # dp.update.middleware(ErrorHandlerMiddleware())
+    dp.update.middleware(ErrorMiddleware())
 
     # Подключаем роутеры
-    # dp.include_router(router)
+    dp.include_router(router)
 
     # Очистка предыдущих обновлений
     with suppress(TelegramBadRequest):

@@ -79,6 +79,28 @@ class CrudUser:
             return result.scalars().all()
 
 
+    async def set_moderator_status(self, username: str, is_moderator: bool) -> bool:
+        """
+        Обновляет статус модератора пользователя.
+
+        :param username: ID пользователя
+        :param is_moderator: новый статус модератора
+        :return: True, если обновление прошло успешно, False если пользователь не найден
+        """
+        async with self.session() as session:
+            try:
+                result = await session.execute(select(User).where(User.username == username))
+                user = result.scalar_one_or_none()
+                if not user:
+                    return False
+                user.is_moderator = is_moderator
+                await session.commit()
+                return True
+            except SQLAlchemyError as e:
+                await session.rollback()
+                raise Exception(f"Ошибка при обновлении статуса модератора: {e}")
+
+
 class CrudActivity:
     def __init__(self):
         self.session: async_sessionmaker = AsyncSessionLocal
