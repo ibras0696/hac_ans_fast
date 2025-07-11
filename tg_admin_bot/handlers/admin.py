@@ -60,7 +60,7 @@ async def call_admin_start_cmd(call_back: CallbackQuery, state: FSMContext):
             await state.update_data(moder_status=True)
             kb = inline_keyboard_buttons(
                 buttons_dct={
-                    f'{is_moders[i]}': f'add_{is_moders[i]}' for i in range(len(is_moders))
+                    f'{is_not_moders[i]}': f'add_{is_not_moders[i]}' for i in range(len(is_moders))
                 },
                 adjust=3
             )
@@ -73,7 +73,9 @@ async def add_moder_cmd(call_back: CallbackQuery, state: FSMContext):
         user_name = call_back.data.replace('add_', '')
         await CrudUser().set_moderator_status(username=user_name, is_moderator=True)
 
-        await call_back.message
+        await call_back.message.delete()
+
+        await call_back.message.answer(f'Пользователь: {user_name} добавлен в роли модера')
     except Exception as ex:
         await call_back.message.answer(f'Ошибка: {ex}')
     finally:
@@ -85,6 +87,10 @@ async def del_mode_cmd(call_back: CallbackQuery, state: FSMContext):
         user_name = call_back.data.replace('del_', '')
 
         await CrudUser().set_moderator_status(username=user_name, is_moderator=False)
+
+        await call_back.message.delete()
+
+        await call_back.message.answer(f'Пользователь: {user_name} удален из роли модера')
     except Exception as ex:
         await call_back.message.answer(f'Ошибка: {ex}')
     finally:
