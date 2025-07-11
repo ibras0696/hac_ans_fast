@@ -94,6 +94,7 @@ class CrudUser:
                 if not user:
                     return False
                 user.is_moderator = is_moderator
+                await conn.flush()
                 await conn.commit()
                 return True
             except SQLAlchemyError as e:
