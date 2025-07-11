@@ -1,0 +1,720 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="activity-detail-container">
+    <!-- Хлебные крошки -->
+    <div class="breadcrumbs">
+        <a href="/check_activities" class="breadcrumb-link">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Назад к списку
+        </a>
+    </div>
+
+    {% if activity %}
+    <div class="activity-hero">
+        <!-- Изображение активности -->
+        <div class="activity-image-section">
+            {% if activity.images %}
+            <img src="{{ activity.images }}" alt="{{ activity.title }}" class="activity-main-image">
+            {% else %}
+            <div class="activity-placeholder">
+                <svg width="80" height="80" fill="none" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#0084f0" stroke-width="2"/>
+                </svg>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Основная информация -->
+        <div class="activity-info">
+            <div class="activity-header">
+                <div class="activity-category-badge">{{ activity.category }}</div>
+                <div class="activity-rating-display">
+                    <svg width="20" height="20" fill="#f39c12" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <span>{{ "%.1f"|format(activity.rating) }}</span>
+                </div>
+            </div>
+
+            <h1 class="activity-title">{{ activity.title }}</h1>
+            <p class="activity-description">{{ activity.description }}</p>
+
+            <div class="activity-meta-grid">
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.76-2.24 5-5 5s-5-2.24-5-5z"/>
+                    </svg>
+                    <div>
+                        <span class="meta-label">Адрес</span>
+                        <span class="meta-value">{{ activity.address }}</span>
+                    </div>
+                </div>
+
+                <div class="meta-item">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <div>
+                        <span class="meta-label">Время работы</span>
+                        <span class="meta-value">{{ activity.working_hours }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопки действий -->
+            <div class="activity-actions">
+                <button class="btn-primary">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    Добавить в избранное
+                </button>
+                <button class="btn-secondary">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                    Поделиться
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция отзывов -->
+    <div class="reviews-section">
+        <div class="reviews-header">
+            <h2>Отзывы</h2>
+            <button class="btn-add-review" onclick="showAddReviewForm()">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                Добавить отзыв
+            </button>
+        </div>
+
+        <!-- Форма добавления отзыва -->
+        <div id="addReviewForm" class="add-review-form" style="display: none;">
+            <h3>Оставить отзыв</h3>
+            <form id="reviewForm" onsubmit="submitReview(event)">
+                <div class="form-group">
+                    <label for="reviewName">Ваше имя</label>
+                    <input type="text" id="reviewName" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewRating">Оценка</label>
+                    <div class="rating-input">
+                        <input type="radio" id="star5" name="rating" value="5" required>
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewText">Ваш отзыв</label>
+                    <textarea id="reviewText" name="text" rows="4" required placeholder="Поделитесь своими впечатлениями..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="hideAddReviewForm()">Отмена</button>
+                    <button type="submit" class="btn-submit">Отправить отзыв</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Список отзывов -->
+        <div class="reviews-list">
+            {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            {{ review.name[:1].upper() }}
+                        </div>
+                        <div>
+                            <div class="reviewer-name">{{ review.name }}</div>
+                            <div class="review-date">{{ review.created_at.strftime('%d.%m.%Y') }}</div>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        {% for i in range(5) %}
+                        <svg width="16" height="16" fill="{% if i < review.rating %}#f39c12{% else %}#ddd{% endif %}" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="review-text">{{ review.text }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="no-reviews">
+                <div class="no-reviews-icon">
+                    <svg width="60" height="60" fill="none" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#ddd" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h3>Пока нет отзывов</h3>
+                <p>Будьте первым, кто оставит отзыв об этой активности!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="error-state">
+        <div class="error-icon">
+            <svg width="80" height="80" fill="none" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" stroke="#e74c3c" stroke-width="2"/>
+            </svg>
+        </div>
+        <h2>Активность не найдена</h2>
+        <p>Запрашиваемая активность не существует или была удалена.</p>
+        <a href="/moder/check_activities" class="btn-primary">Вернуться к списку</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .activity-detail-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .breadcrumbs {
+      margin-bottom: 32px;
+    }
+
+    .breadcrumb-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #0084f0;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .breadcrumb-link:hover {
+      color: #005fa3;
+    }
+
+    .activity-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+      align-items: start;
+    }
+
+    .activity-image-section {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 132, 240, 0.15);
+    }
+
+    .activity-main-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    .activity-placeholder {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .activity-info {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .activity-category-badge {
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .activity-rating-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #f39c12;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .activity-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #222;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .activity-description {
+      font-size: 1.1rem;
+      color: #666;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .activity-meta-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 1px solid #e9ecef;
+    }
+
+    .meta-item svg {
+      color: #0084f0;
+      flex-shrink: 0;
+    }
+
+    .meta-label {
+      display: block;
+      font-size: 0.85rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .meta-value {
+      display: block;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .activity-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .btn-primary, .btn-secondary {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 132, 240, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f8f9fa;
+      color: #666;
+      border: 2px solid #e9ecef;
+    }
+
+    .btn-secondary:hover {
+      background: #e9ecef;
+      transform: translateY(-2px);
+    }
+
+    /* Секция отзывов */
+    .reviews-section {
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .reviews-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .reviews-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #222;
+      margin: 0;
+    }
+
+    .btn-add-review {
+      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-add-review:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(39, 174, 96, 0.3);
+    }
+
+    /* Форма добавления отзыва */
+    .add-review-form {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 2px solid #e9ecef;
+    }
+
+    .add-review-form h3 {
+      margin: 0 0 20px 0;
+      color: #222;
+      font-size: 1.3rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #0084f0;
+    }
+
+    .rating-input {
+      display: flex;
+      gap: 4px;
+    }
+
+    .rating-input input[type="radio"] {
+      display: none;
+    }
+
+    .rating-input label {
+      font-size: 2rem;
+      color: #ddd;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .rating-input input[type="radio"]:checked ~ label,
+    .rating-input label:hover,
+    .rating-input label:hover ~ label {
+      color: #f39c12;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn-cancel {
+      background: #f8f9fa;
+      color: #666;
+      border: 2px solid #e9ecef;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+      background: #e9ecef;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(39, 174, 96, 0.3);
+    }
+
+    /* Список отзывов */
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .review-card {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #e9ecef;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .reviewer-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reviewer-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .reviewer-name {
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .review-date {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .review-rating {
+      display: flex;
+      gap: 2px;
+    }
+
+    .review-text {
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .no-reviews {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .no-reviews-icon {
+      margin-bottom: 24px;
+    }
+
+    .no-reviews h3 {
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .no-reviews p {
+      color: #999;
+      margin: 0;
+    }
+
+    .error-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .error-icon {
+      margin-bottom: 24px;
+    }
+
+    .error-state h2 {
+      color: #e74c3c;
+      margin-bottom: 16px;
+    }
+
+    .error-state p {
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .activity-hero {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .activity-title {
+        font-size: 2rem;
+      }
+
+      .activity-actions {
+        flex-direction: column;
+      }
+
+      .reviews-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+</style>
+
+<script>
+    function showAddReviewForm() {
+      document.getElementById('addReviewForm').style.display = 'block';
+    }
+
+    function hideAddReviewForm() {
+      document.getElementById('addReviewForm').style.display = 'none';
+      document.getElementById('reviewForm').reset();
+    }
+
+    function submitReview(event) {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const reviewData = {
+        name: formData.get('name'),
+        rating: parseInt(formData.get('rating')),
+        text: formData.get('text'),
+        activity_id: {{ activity.id if activity else 0 }}
+      };
+
+      // Здесь будет AJAX запрос для отправки отзыва
+      fetch('/add_review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showNotification('Отзыв успешно добавлен!', 'success');
+          hideAddReviewForm();
+          // Перезагружаем страницу для отображения нового отзыва
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        } else {
+          showNotification('Ошибка при добавлении отзыва', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showNotification('Ошибка при добавлении отзыва', 'error');
+      });
+    }
+
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.textContent = message;
+
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        ${type === 'success' ? 'background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);' : 'background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);'}
+      `;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, 3000);
+    }
+
+    // Добавляем CSS анимации
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %} 
