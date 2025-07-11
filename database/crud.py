@@ -153,6 +153,7 @@ class CrudActivity:
             result = await session.execute(select(Activity))
             return result.scalars().all()
 
+
     # 5. Получить активности по категории и городу
     async def list_activities_by_category(self, city: str, category: str) -> list[Activity]:
         """

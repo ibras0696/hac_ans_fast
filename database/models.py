@@ -28,6 +28,7 @@ class User(Base):
     history = relationship("ActivityHistory", back_populates="user")  # 1:N
     recommendations = relationship("Recommendation", back_populates="user")  # 1:N
 
+
 # Модель предпочтений пользователя
 class UserPreferences(Base):
     __tablename__ = "preferences"
@@ -40,6 +41,7 @@ class UserPreferences(Base):
 
     user = relationship("User", back_populates="preferences")
 
+
 # Модель активностей (что можно делать)
 class Activity(Base):
     __tablename__ = "activities"
@@ -48,13 +50,14 @@ class Activity(Base):
     title = Column(String, nullable=False)  # Название активности
     description = Column(String, nullable=False)  # Описание
     category = Column(String, nullable=False)  # Категория (спорт, отдых, образование и т.д.)
-    address = Column(String, nullable=False) # Адрес активности
-    images = Column(String, nullable=False) # Ссылка на фотографию
-    working_hours = Column(String, nullable=False) # Время работы
+    address = Column(String, nullable=False)  # Адрес активности
+    images = Column(String, nullable=False)  # Ссылка на фотографию
+    working_hours = Column(String, nullable=False)  # Время работы
     rating = Column(Float, nullable=False)
 
     history = relationship("ActivityHistory", back_populates="activity")
     recommendations = relationship("Recommendation", back_populates="activity")
+
 
 # История выполненных активностей
 class ActivityHistory(Base):
@@ -69,6 +72,7 @@ class ActivityHistory(Base):
     # Обратная связь
     user = relationship("User", back_populates="history")
     activity = relationship("Activity", back_populates="history")
+
 
 # Модель для хранения рекомендаций
 class Recommendation(Base):
