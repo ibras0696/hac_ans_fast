@@ -1,6 +1,6 @@
 from aiogram.filters import BaseFilter
 from aiogram.types import Message, CallbackQuery
-from ..config import ADMIN_ID
+from config import ADMIN_ID
 
 
 class AdminTypeFilter(BaseFilter):

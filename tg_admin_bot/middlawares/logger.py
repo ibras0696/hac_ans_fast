@@ -8,7 +8,7 @@ from typing import Callable, Awaitable, Any
 from aiogram import BaseMiddleware, Bot
 from aiogram.types import Update
 
-from ..config import ADMIN_ID
+from config import ADMIN_ID
 
 
 class ErrorMiddleware(BaseMiddleware):
