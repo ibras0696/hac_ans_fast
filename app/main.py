@@ -1,11 +1,12 @@
 import os
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
 from app.routes import router
+from app.routes.auth import get_current_user_from_cookie
 
 app = FastAPI()
 
@@ -18,6 +19,15 @@ templates = Jinja2Templates(directory=os.path.join(TEMPLATES_DIR, "templates"))
 STATIC_DIR = os.path.dirname(os.path.abspath(__file__))
 # Подключение css
 app.mount("/static", StaticFiles(directory=os.path.join(STATIC_DIR, "static")), name="static")
+
+
+@app.middleware("http")
+async def add_user_to_request(request: Request, call_next):
+    """Добавляет текущего пользователя в request.state для всех шаблонов"""
+    request.state.current_user = await get_current_user_from_cookie(request)
+    response = await call_next(request)
+    return response
+
 
 # Роуты
 app.include_router(router)

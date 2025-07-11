@@ -25,4 +25,8 @@ TECHNOLOGIES = [
 
 @router.get("/", response_class=HTMLResponse)
 def project_technologies(request: Request):
-    return templates.TemplateResponse("project_technologies.html", {"request": request, "technologies": TECHNOLOGIES})
+    return templates.TemplateResponse("project_technologies.html", {
+        "request": request, 
+        "technologies": TECHNOLOGIES,
+        "current_user": request.state.current_user
+    })

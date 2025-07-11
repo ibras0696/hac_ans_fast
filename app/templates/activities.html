@@ -12,9 +12,9 @@
         {% for activity in activities %}
         <div class="activity-card">
             <!-- Изображение активности -->
-            <div class="activity-image">
-                {% if activity.images %}
-                <img src="{{ activity.images }}" alt="{{ activity.title }}" onerror="this.style.display='none'">
+            <div class="activity-image {% if not activity.images or 'default_image.svg' in activity.images %}no-image{% endif %}">
+                {% if activity.images and 'default_image.svg' not in activity.images %}
+                <img src="{{ activity.images }}" onerror="this.style.display='none'">
                 {% endif %}
                 <div class="activity-overlay">
                     <div class="activity-category">{{ activity.category }}</div>
@@ -23,7 +23,7 @@
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                         </svg>
                         {{ "%.1f"|format(activity.rating) }}
-                    </div>
+                </div>
                 </div>
             </div>
 
@@ -35,10 +35,10 @@
                             <div class="activity-meta">
               <div class="activity-address">
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.76-2.24 5-5 5s-5-2.24-5-5z"/>
-                </svg>
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.76-2.24 5-5 5s-5-2.24-5-5z"/>
+                        </svg>
                 {{ activity.address }}
-              </div>
+                    </div>
               <div class="activity-hours">
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -55,8 +55,8 @@
                 </svg>
                 Открыть
               </a>
+                </div>
             </div>
-          </div>
         </div>
         {% endfor %}
     </div>
@@ -133,13 +133,22 @@
       position: relative;
       overflow: hidden;
     }
-
     .activity-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
-
+    .activity-image.no-image {
+      background: linear-gradient(135deg, #0084f0 0%, #00c6fb 100%);
+    }
+    .activity-image:not(.no-image) {
+      background: none;
+    }
     .activity-overlay {
       position: absolute;
       top: 0;
@@ -151,6 +160,10 @@
       justify-content: space-between;
       align-items: flex-start;
       padding: 16px;
+      z-index: 2;
+    }
+    .activity-image:not(.no-image) .activity-overlay {
+      background: none;
     }
 
     .activity-category {

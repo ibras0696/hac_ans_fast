@@ -395,10 +395,11 @@
     </svg>
 </div>
 <div class="left-bar">
-    <div class="logo-container" style="flex-direction:column;align-items:flex-start;gap:10px;">
-        <div class="logos-row" style="display:flex;align-items:center;gap:12px;">
+    <div class="logo-container" style="flex-direction:column;align-items:center;gap:10px;">
+        <div class="logos-row" style="display:flex;align-items:center;justify-content:center;gap:12px;">
+            <img src="/static/ansar.png" alt="ANSAR Logo" style="width: 40px; height: 40px; object-fit: contain; filter: brightness(0) invert(1);">
         </div>
-        <div class="logo-text" style="margin-top:2px;font-size:1.35rem;letter-spacing:1px;">ANSAR + GGNTY</div>
+        <div class="logo-text" style="margin-top:2px;font-size:1.35rem;letter-spacing:1px;text-align:center;">ANSAR</div>
     </div>
     <div class="nav-menu">
         <a href="/" class="nav-item active">
@@ -441,7 +442,7 @@
             </svg>
             <span>Стек технологий</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="{% if request.state.current_user %}/profile/{{ request.state.current_user.id }}{% else %}/auth/login{% endif %}" class="nav-item">
             <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="white" stroke-width="2"/>
                 <path d="M2 16c0-2.761 3.134-5 7-5s7 2.239 7 5" stroke="white" stroke-width="2"/>
@@ -449,28 +450,86 @@
             <span>Профиль</span>
         </a>
     </div>
-    <div class="auth-buttons">
-        <a href="/auth/login" class="auth-btn login-btn">
-            <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="8" cy="8" r="7" stroke="white" stroke-width="1.5"/>
-                <path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" stroke="white" stroke-width="1.5"/>
-                <path d="M3 13.5c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="white" stroke-width="1.5"/>
-            </svg>
-            <span>Войти</span>
-        </a>
-        <a href="/auth/register" class="auth-btn register-btn">
-            <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="8" cy="8" r="7" stroke="white" stroke-width="1.5"/>
-                <path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" stroke="white" stroke-width="1.5"/>
-                <path d="M3 13.5c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="white" stroke-width="1.5"/>
-                <path d="M8 6v4M6 8h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            <span>Регистрация</span>
-        </a>
+    <div style="flex:1;"></div>
+    <!-- Блок профиля и кнопок внизу -->
+    <div class="sidebar-bottom" style="width:100%;padding:0 0 32px 0;display:flex;flex-direction:column;align-items:center;gap:18px;">
+        {% if request.state.current_user %}
+            <div class="user-profile" style="display: flex; align-items: center; gap: 12px; padding: 12px 24px; background: rgba(255,255,255,0.15); border-radius: 16px;">
+                <div class="user-avatar" style="width: 44px; height: 44px; background: linear-gradient(135deg, #00c6fb 0%, #0084f0 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; box-shadow: 0 2px 8px rgba(0,132,240,0.3);">
+                    {{ request.state.current_user.full_name[0] if request.state.current_user.full_name else request.state.current_user.username[0] }}
+                </div>
+                <div class="user-info" style="flex: 1; min-width: 0;">
+                    <div class="user-name" style="color: white; font-weight: 600; font-size: 15px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ request.state.current_user.full_name or request.state.current_user.username }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="auth-btns-col" style="display:flex;flex-direction:column;gap:12px;justify-content:center;align-items:stretch;margin-bottom:10px;width:100%;padding:0 32px;">
+                <a href="/auth/login" class="auth-btn login-btn">
+                    <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px;vertical-align:middle;">
+                        <circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="2"/>
+                        <path d="M10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#fff" stroke-width="2"/>
+                        <path d="M3 17c0-2.761 3.134-5 7-5s7 2.239 7 5" stroke="#fff" stroke-width="2"/>
+                    </svg>
+                    <span>Войти</span>
+                </a>
+                <a href="/auth/register" class="auth-btn register-btn">
+                    <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px;vertical-align:middle;">
+                        <circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="2"/>
+                        <path d="M10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#fff" stroke-width="2"/>
+                        <path d="M3 17c0-2.761 3.134-5 7-5s7 2.239 7 5" stroke="#fff" stroke-width="2"/>
+                        <path d="M10 8v4M8 10h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>Регистрация</span>
+                </a>
+            </div>
+        {% endif %}
+        <div class="sidebar-bottom-text" style="width:100%;text-align:center;margin-top:8px;">
+            <span style="color:#fff;font-size:1.45rem;font-weight:800;letter-spacing:1px;text-shadow:0 2px 8px #0094ff33;">ANSAR + GGNTY</span>
+        </div>
     </div>
-    <div class="hackathon-container">
-        <div class="hackathon-text">ANSAR + GGNTRY</div>
-    </div>
+    <style>
+    .main-auth-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(90deg, #0094ff 60%, #00c6fb 100%);
+        border: 2.5px solid #e3f0ff;
+        border-radius: 40px;
+        padding: 13px 32px 13px 26px;
+        box-shadow: 0 4px 24px 0 #0094ff33;
+        transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+        text-decoration: none;
+        margin: 0;
+        outline: none;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 320px;
+    }
+    .main-auth-btn:hover {
+        background: linear-gradient(90deg, #00c6fb 60%, #0094ff 100%);
+        color: #fff;
+        box-shadow: 0 6px 32px 0 #0094ff44;
+        text-decoration: none;
+    }
+    .main-auth-btn svg {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+    .auth-btns-col {
+        width: 100%;
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+    }
+    </style>
 </div>
 <div class="main-content">
     {% block content %}

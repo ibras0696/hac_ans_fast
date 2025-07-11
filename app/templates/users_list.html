@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto; padding: 32px; background: #fff; border-radius: 18px; box-shadow: 0 6px 32px rgba(0,132,240,0.10);">
+    <h2 style="color: #0084f0; font-size: 2.1rem; font-weight: 800; margin-bottom: 28px; text-align:center;">Все пользователи</h2>
+    <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:1.08rem;">
+        <thead>
+            <tr style="background:linear-gradient(90deg,#e3f0ff 60%,#f8f9fa 100%);">
+                <th style="padding:12px 8px;text-align:center;font-weight:800;">ID</th>
+                <th style="padding:12px 8px;text-align:left;font-weight:800;">Username</th>
+                <th style="padding:12px 8px;text-align:left;font-weight:800;">Полное имя</th>
+                <th style="padding:12px 8px;text-align:center;font-weight:800;">Модератор</th>
+                <th style="padding:12px 8px;text-align:center;font-weight:800;">Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr style="border-bottom:1px solid #e3f0ff;">
+                <td style="padding:10px 8px;text-align:center;">{{ u.id }}</td>
+                <td style="padding:10px 8px;text-align:left;">{{ u.username }}</td>
+                <td style="padding:10px 8px;text-align:left;">{{ u.full_name or '-' }}</td>
+                <td style="padding:10px 8px;text-align:center;">
+                    {% if u.is_moderator %}
+                        <span style="color:#27ae60;font-weight:700;">Да</span>
+                    {% else %}
+                        <span style="color:#e74c3c;font-weight:700;">Нет</span>
+                    {% endif %}
+                </td>
+                <td style="padding:10px 8px;text-align:center;">
+                    {% if current_user.id != u.id %}
+                    <form method="post" action="/moder/toggle_role/{{ u.id }}" style="display:inline;">
+                        <button type="submit" style="padding:7px 18px;border-radius:8px;border:none;font-weight:700;cursor:pointer;background:linear-gradient(90deg,#0084f0 60%,#00c6fb 100%);color:#fff;box-shadow:0 2px 8px #0084f033;transition:background 0.18s;">
+                            {% if u.is_moderator %}Сделать обычным{% else %}Сделать модератором{% endif %}
+                        </button>
+                    </form>
+                    {% else %}
+                        <span style="color:#aaa;">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+        <a href="/moder" style="display:inline-block;padding:12px 32px;background:linear-gradient(90deg,#0084f0 60%,#00c6fb 100%);color:#fff;font-weight:800;border-radius:10px;text-decoration:none;box-shadow:0 2px 12px #0084f033;transition:background 0.18s;">Назад к панели модератора</a>
+    </div>
+</div>
+{% endblock %} 
