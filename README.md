@@ -83,8 +83,8 @@ hac_ans_fast/
 ### 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/yourname/ansar.git
-cd ansar
+git clone https://github.com/yourname/hac_ans_fast.git
+cd hac_ans_fast
 ```
 
 ### 2. Запуск через Docker Compose
