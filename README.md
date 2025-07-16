@@ -83,7 +83,7 @@ hac_ans_fast/
 ### 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/yourname/hac_ans_fast.git
+git clone https://github.com/ibras0696/hac_ans_fast.git
 cd hac_ans_fast
 ```
 
